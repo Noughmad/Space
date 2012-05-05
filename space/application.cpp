@@ -1,19 +1,22 @@
 #include "application.h"
 #include "object.h"
 #include "movementmanager.h"
+#include "objects/celestialobject.h"
 #include "space_config.h"
 
-#include <OgreRoot.h>
-#include <OgreConfigFile.h>
 #include <OgreRenderWindow.h>
-#include <OISInputManager.h>
 
 #include <CEGUI.h>
 #include <RendererModules/Ogre/CEGUIOgreRenderer.h>
 
 #include <QtCore/QMap>
+#include <QtCore/QString>
 
 using namespace Space;
+using namespace CEGUI;
+
+const char* DetailWindowId = "Space/Detail";
+const char* DetailContentsId = "Space/Detail/Contents";
 
 CEGUI::MouseButton convertButton(OIS::MouseButtonID buttonID)
 {
@@ -48,99 +51,6 @@ Application::~Application()
 
 }
 
-void Application::setupOgre()
-{
-    mRoot = new Ogre::Root(Ogre::String(DataDir) + "/plugins.cfg");
-
-    Ogre::ConfigFile cf;
-    cf.load(Ogre::String(DataDir) + "/resources.cfg");
-
-    // Go through all sections & settings in the file
-    Ogre::ConfigFile::SectionIterator seci = cf.getSectionIterator();
-
-    Ogre::String secName, typeName, archName;
-    while (seci.hasMoreElements())
-    {
-        secName = seci.peekNextKey();
-        Ogre::ConfigFile::SettingsMultiMap *settings = seci.getNext();
-        Ogre::ConfigFile::SettingsMultiMap::iterator i;
-        for (i = settings->begin(); i != settings->end(); ++i)
-        {
-            typeName = i->first;
-            archName = i->second;
-            Ogre::ResourceGroupManager::getSingleton().addResourceLocation(
-                archName, typeName, secName);
-        }
-    }
-    
-    if(mRoot->showConfigDialog())
-    {
-        // If returned true, user clicked OK so initialise
-        // Here we choose to let the system create a default rendering window by passing 'true'
-        mWindow = mRoot->initialise(true, "TutorialApplication Render Window");
-    }
-    else
-    {
-        return;
-    }
-    
-    mSceneManager = mRoot->createSceneManager(Ogre::ST_EXTERIOR_REAL_FAR, "SceneManager");
-    
-    mCamera = mSceneManager->createCamera("PlayerCamera");
-    mCamera->setPosition(Ogre::Vector3(0,0,800));
-    mCamera->lookAt(Ogre::Vector3(0,0,-3000));
-    mCamera->setNearClipDistance(5);
-    
-    // Create one viewport, entire window
-    Ogre::Viewport* vp = mWindow->addViewport(mCamera);
-    vp->setBackgroundColour(Ogre::ColourValue(0,0,0));
-
-    // Alter the camera aspect ratio to match the viewport
-    mCamera->setAspectRatio(
-        Ogre::Real(vp->getActualWidth()) / Ogre::Real(vp->getActualHeight()));
-
-    // Set default mipmap level (NB some APIs ignore this)
-    Ogre::TextureManager::getSingleton().setDefaultNumMipmaps(5);
-
-    Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
-
-    mRoot->addFrameListener(this);
-   
-    Ogre::LogManager::getSingletonPtr()->logMessage("*** Initializing OIS ***");
-    OIS::ParamList pl;
-    size_t windowHnd = 0;
-    std::ostringstream windowHndStr;
-
-    mWindow->getCustomAttribute("WINDOW", &windowHnd);
-    windowHndStr << windowHnd;
-    pl.insert(std::make_pair(std::string("WINDOW"), windowHndStr.str()));
-
-    OIS::InputManager* mInputManager = OIS::InputManager::createInputSystem( pl );
-    mKeyboard = static_cast<OIS::Keyboard*>(mInputManager->createInputObject( OIS::OISKeyboard, true ));
-    mMouse = static_cast<OIS::Mouse*>(mInputManager->createInputObject( OIS::OISMouse, true ));
-
-    mMouse->setEventCallback(this);
-    mKeyboard->setEventCallback(this);
-
-    //Set initial mouse clipping size
-    windowResized(mWindow);
-
-    //Register as a Window listener
-    Ogre::WindowEventUtilities::addWindowEventListener(mWindow, this); 
-    
-    mSceneManager->setAmbientLight(Ogre::ColourValue(0.5f, 0.5f, 0.5f));
-  
-    // Create a Light and set its position
-    /*
-    Ogre::Light* light = mSceneManager->createLight("MainLight");
-    light->setPosition(20.0f, 80.0f, 50.0f);
-    */
-    
-    mRaySceneQuery = mSceneManager->createRayQuery(Ogre::Ray());
-    
-    Ogre::LogManager::getSingletonPtr()->logMessage("*** Prepared to Start Rendering ***");
-}
-
 void Application::setupGui()
 {
     mGuiRenderer = &CEGUI::OgreRenderer::bootstrapSystem();
@@ -157,20 +67,13 @@ void Application::setupGui()
     CEGUI::WindowManager* windowManager = CEGUI::WindowManager::getSingletonPtr();
     CEGUI::Window *sheet = windowManager->loadWindowLayout(Ogre::String(DataDir) + "/space.layout");
     
-    CEGUI::Window* quit = windowManager->getWindow("Space/QuitButton");
+    CEGUI::Window* quit = windowManager->getWindow("Space/Menu/QuitButton");
     quit->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Application::quit, this));
     
-    CEGUI::Window *pause = windowManager->getWindow("Space/PauseButton");
+    CEGUI::Window *pause = windowManager->getWindow("Space/Menu/PauseButton");
     pause->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Application::pause, this));    
     
     CEGUI::System::getSingleton().setGUISheet(sheet);    
-}
-
-void Application::start()
-{
-    mPause = false;
-    mShutDown = false;
-    mRoot->startRendering();
 }
 
 bool Application::frameStarted(const Ogre::FrameEvent& evt)
@@ -258,6 +161,9 @@ bool Application::mousePressed(const OIS::MouseEvent& arg, OIS::MouseButtonID id
         mSelectedObject->showBoundingBox(false);
     }
     CEGUI::System::getSingletonPtr()->injectMouseButtonDown(convertButton(id));
+    
+    MultiColumnList* details = dynamic_cast<MultiColumnList*>(WindowManager::getSingletonPtr()->getWindow(DetailContentsId));
+    details->resetList();
         
     CEGUI::Point mousePos = CEGUI::MouseCursor::getSingleton().getPosition();
     Ogre::Ray mouseRay = mCamera->getCameraToViewportRay(mousePos.d_x/float(arg.state.width), mousePos.d_y/float(arg.state.height));
@@ -267,7 +173,7 @@ bool Application::mousePressed(const OIS::MouseEvent& arg, OIS::MouseButtonID id
     // Execute query
     Ogre::RaySceneQueryResult &result = mRaySceneQuery->execute();
     Ogre::RaySceneQueryResult::iterator iter; 
-    
+    mSelectedObject = 0;
     for ( iter = result.begin(); iter != result.end(); iter++ )
     {
         if ( iter->movable )
@@ -279,7 +185,45 @@ bool Application::mousePressed(const OIS::MouseEvent& arg, OIS::MouseButtonID id
     
     if (mSelectedObject)
     {
-        mSelectedObject->showBoundingBox(true);
+        Ogre::LogManager::getSingletonPtr()->logMessage("Found a selected object");
+        Ogre::LogManager::getSingletonPtr()->logMessage(mSelectedObject->getName());
+
+        Object* object = mObjectNodes.key(mSelectedObject);
+        Ogre::SceneNode* root = mSceneManager->getRootSceneNode();
+        
+        Ogre::LogManager::getSingletonPtr()->logMessage("Starting loop to traverse the graph");
+        while (!object && (mSelectedObject != root) )
+        {
+            Ogre::LogManager::getSingletonPtr()->logMessage(mSelectedObject->getName());
+            std::cout << "Not yet " << mSelectedObject->getName() << std::endl;
+            mSelectedObject = mSelectedObject->getParentSceneNode();
+            object = mObjectNodes.key(mSelectedObject);
+        }
+        
+        Ogre::LogManager::getSingletonPtr()->logMessage("Finished loop to traverse the graph");
+
+        if (object)
+        {
+            mSelectedObject->showBoundingBox(true);
+
+            details->addColumn("Property", 1, UDim(0.25, 0));
+            details->addColumn("Value", 2, UDim(0.75, 0));
+            
+            details->addRow();            
+            details->setItem(new ListboxTextItem("Name"), 1, 0);
+            details->setItem(new ListboxTextItem(object->name()), 2, 0);
+            
+            details->addRow();            
+            details->setItem(new ListboxTextItem("Type"), 1, 1);
+            details->setItem(new ListboxTextItem(object->type()), 2, 1);
+
+            if (CelestialObject* celestial = dynamic_cast<CelestialObject*>(object))
+            {
+                details->addRow();            
+                details->setItem(new ListboxTextItem("Size"), 1, 2);
+                details->setItem(new ListboxTextItem(QString::number(celestial->size()).toStdString()), 2, 2);
+            }
+        }
     }
     return true;
 }

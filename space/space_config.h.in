@@ -1,4 +1,9 @@
+#ifndef SPACE_CONFIG_H
+#define SPACE_CONFIG_H
+
 namespace Space
 {
-    const char* DataDir = "${SPACE_DATA_INSTALL_DIR}";
+    static const char* DataDir = "${SPACE_DATA_INSTALL_DIR}";
 }
+
+#endif // SPACE_CONFIG_H

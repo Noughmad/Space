@@ -1,3 +1,6 @@
+#ifndef SPACE_TYPES_H
+#define SPACE_TYPES_H
+
 #include <string>
 
 #include <OgreVector3.h>
@@ -23,3 +26,5 @@ typedef Ogre::Vector3 Coordinates;
 typedef QMap<Object*, Ogre::SceneNode*> ObjectMap;
 
 }
+
+#endif // SPACE_TYPES_H

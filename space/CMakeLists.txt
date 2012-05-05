@@ -1,9 +1,14 @@
 
-set (space_SRCS objects/celestialobject.cpp objects/planet.cpp objects/star.cpp
+set (space_SRCS 
+    object.cpp    
+    objects/celestialobject.cpp 
+    objects/planet.cpp 
+    objects/star.cpp
+
     movementmanager.cpp
     application.cpp
+    application_ogre.cpp
     scene.cpp
-    object.cpp    
 )
 
 configure_file(space_config.h.in space_config.h)
