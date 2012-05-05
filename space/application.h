@@ -14,6 +14,11 @@ class SceneManager;
 class SceneManager;
 }
 
+namespace CEGUI {
+class OgreRenderer;
+class EventArgs;
+}
+
 namespace Space {
 
 class MovementManager;
@@ -27,6 +32,9 @@ public:
     virtual ~Application();
     
     void start();
+    
+    void setupOgre();
+    void setupGui();
     
     virtual bool frameStarted(const Ogre::FrameEvent& evt);
     virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
@@ -46,6 +54,8 @@ public:
     void addObject(Object* object);
     void removeObject(Object* object);
     
+    bool quit(const CEGUI::EventArgs& e);
+    
 private:
     Ogre::Root* mRoot;
     Ogre::SceneManager* mSceneManager;
@@ -55,6 +65,8 @@ private:
     OIS::Mouse* mMouse;
     OIS::Keyboard* mKeyboard;
     
+    CEGUI::OgreRenderer* mGuiRenderer;
+
     MovementManager* mMovementManager;
     
     ObjectMap mObjectNodes;

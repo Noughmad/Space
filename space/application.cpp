@@ -7,16 +7,47 @@
 #include <OgreRenderWindow.h>
 #include <OISInputManager.h>
 
+#include <CEGUI.h>
+#include <RendererModules/Ogre/CEGUIOgreRenderer.h>
+
 #include <QtCore/QMap>
 
 using namespace Space;
 
+CEGUI::MouseButton convertButton(OIS::MouseButtonID buttonID)
+{
+    switch (buttonID)
+    {
+    case OIS::MB_Left:
+        return CEGUI::LeftButton;
+ 
+    case OIS::MB_Right:
+        return CEGUI::RightButton;
+ 
+    case OIS::MB_Middle:
+        return CEGUI::MiddleButton;
+ 
+    default:
+        return CEGUI::LeftButton;
+    }
+}
 
 Application::Application()
 {
     mMovementManager = new MovementManager();
-    
     mShutDown = false;
+    
+    setupOgre();
+    setupGui();
+}
+
+Application::~Application()
+{
+
+}
+
+void Application::setupOgre()
+{
     mRoot = new Ogre::Root("plugins.cfg");
 
     Ogre::ConfigFile cf;
@@ -106,9 +137,29 @@ Application::Application()
     Ogre::LogManager::getSingletonPtr()->logMessage("*** Prepared to Start Rendering ***");
 }
 
-Application::~Application()
+void Application::setupGui()
 {
-
+    mGuiRenderer = &CEGUI::OgreRenderer::bootstrapSystem();
+    
+    CEGUI::Imageset::setDefaultResourceGroup("Imagesets");
+    CEGUI::Font::setDefaultResourceGroup("Fonts");
+    CEGUI::Scheme::setDefaultResourceGroup("Schemes");
+    CEGUI::WidgetLookManager::setDefaultResourceGroup("LookNFeel");
+    CEGUI::WindowManager::setDefaultResourceGroup("Layouts");
+    
+    CEGUI::SchemeManager::getSingleton().create("TaharezLook.scheme");
+    CEGUI::System::getSingleton().setDefaultMouseCursor("TaharezLook", "MouseArrow");
+    
+    CEGUI::WindowManager* windowManager = CEGUI::WindowManager::getSingletonPtr();
+    CEGUI::Window *sheet = windowManager->createWindow("DefaultWindow", "Space/Sheet");
+    CEGUI::Window *quit = windowManager->createWindow("TaharezLook/Button", "Space/QuitButton");
+    quit->setText("Quit");
+    quit->setSize(CEGUI::UVector2(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
+    quit->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Application::quit, this));
+    
+    sheet->addChildWindow(quit);
+    CEGUI::System::getSingleton().setGUISheet(sheet);
+    
 }
 
 void Application::start()
@@ -127,10 +178,12 @@ bool Application::frameRenderingQueued(const Ogre::FrameEvent& evt)
         return false;
     
     mMovementManager->processFrame(mSceneManager, mObjectNodes, evt.timeSinceLastEvent);
-    
+        
     //Need to capture/update each device
     mKeyboard->capture();
     mMouse->capture();
+    
+    CEGUI::System::getSingletonPtr()->injectTimePulse(evt.timeSinceLastEvent);
     return true;
 }
 
@@ -152,6 +205,7 @@ bool Application::windowClosing(Ogre::RenderWindow* rw)
 
 bool Application::keyReleased(const OIS::KeyEvent& arg)
 {
+    CEGUI::System::getSingletonPtr()->injectKeyUp(arg.key);
     return true;
 }
 
@@ -174,16 +228,23 @@ bool Application::keyPressed(const OIS::KeyEvent& arg)
         default:
             break;
     }
+    
+    CEGUI::System* sys = CEGUI::System::getSingletonPtr();
+    sys->injectKeyDown(arg.key);
+    sys->injectChar(arg.text);
+    
     return true;
 }
 
 bool Application::mouseReleased(const OIS::MouseEvent& arg, OIS::MouseButtonID id)
 {
+    CEGUI::System::getSingletonPtr()->injectMouseButtonUp(convertButton(id));
     return true;
 }
 
 bool Application::mousePressed(const OIS::MouseEvent& arg, OIS::MouseButtonID id)
 {
+    CEGUI::System::getSingletonPtr()->injectMouseButtonDown(convertButton(id));
     return true;
 }
 
@@ -197,6 +258,14 @@ bool Application::mouseMoved(const OIS::MouseEvent& arg)
     {
         mCamera->moveRelative(Ogre::Vector3(0, 0, -dz));
     }
+    
+    CEGUI::System* sys = CEGUI::System::getSingletonPtr();
+    sys->injectMouseMove(arg.state.X.rel, arg.state.Y.rel);
+    if (arg.state.Z.rel)
+    {
+        sys->injectMouseWheelChange(arg.state.Z.rel / 120.0f);
+    }
+    
     return true;
 }
 
@@ -227,4 +296,12 @@ void Application::removeObject(Object* object)
     mSceneManager->getRootSceneNode()->removeChild(node);
     delete node;
 }
+
+bool Application::quit(const CEGUI::EventArgs& e)
+{
+    (void)e;
+    mShutDown = true;
+    return true;
+}
+
 
