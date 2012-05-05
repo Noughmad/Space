@@ -15,7 +15,7 @@ MovementManager::~MovementManager()
 
 void MovementManager::processFrame(Ogre::SceneManager* sceneManager, ObjectMap objects, Real timeSinceLastFrame)
 {
-    const Real factor = 0.1;
+    const Real factor = 0.03;
     
     ObjectMap::iterator it = objects.begin();
     ObjectMap::iterator end = objects.end();
@@ -25,7 +25,7 @@ void MovementManager::processFrame(Ogre::SceneManager* sceneManager, ObjectMap o
         if (CelestialObject* celestial = dynamic_cast<CelestialObject*>(it.key()))
         {
             node->roll(Ogre::Radian(factor * timeSinceLastFrame * celestial->revolutionSpeed()));
-            Ogre::SceneNode* subNode = dynamic_cast<Ogre::SceneNode*>(node->getChild(celestial->name() + "RotationNode"));
+            Ogre::SceneNode* subNode = dynamic_cast<Ogre::SceneNode*>(node->getChild(celestial->name() + "/RotationNode"));
             if (subNode)
             {
                 subNode->roll(Ogre::Radian(factor * timeSinceLastFrame * celestial->rotationSpeed()));

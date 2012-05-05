@@ -4,15 +4,21 @@ FileSystem=${OGRE_MEDIA_DIR}/models
 FileSystem=${OGRE_MEDIA_DIR}/materials/programs
 FileSystem=${OGRE_MEDIA_DIR}/materials/textures
 FileSystem=${OGRE_MEDIA_DIR}/materials/scripts
+FileSystem=${OGRE_MEDIA_DIR}/particle
+FileSystem=${SPACE_DATA_INSTALL_DIR}
 
 [Imagesets]
 FileSystem=${CEGUI_MEDIA_DIR}/imagesets
+
 [Fonts]
 FileSystem=${CEGUI_MEDIA_DIR}/fonts
+
 [Schemes]
 FileSystem=${CEGUI_MEDIA_DIR}/schemes
+
 [LookNFeel]
 FileSystem=${CEGUI_MEDIA_DIR}/looknfeel
+
 [Layouts]
 FileSystem=${CEGUI_MEDIA_DIR}/layouts
-FileSystem=${SPACE_DATA_INSTALL_DIR}
+FileSystem=${SPACE_DATA_INSTALL_DIR}/layouts

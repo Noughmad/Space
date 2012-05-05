@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <GUILayout >
     <Window Type="DefaultWindow" name="Space" >
+        <Property Name="MousePassThroughEnabled" Value="True" />
         <Property Name="UnifiedPosition" Value="{ {0.0, 0}, {0.0, 0} }" />
         <Property Name="UnifiedSize" Value="{ {1.0, 0}, {1.0, 0} }" />
         
-        <Window Type="TaharezLook/FrameWindow" Name="Space/Menu" >
+        <Window Type="DefaultWindow" Name="Space/Menu" >
             <Property Name="Text" Value="Menu" />
             <Property Name="TitlebarEnabled" Value="True" />
             <Property Name="UnifiedPosition" Value="{ {0.0, 0 }, {0.0, 0} }" />
@@ -23,11 +24,14 @@
             </Window>
         </Window>
         
-        <Window Type="TaharezLook/FrameWindow" Name="Space/Detail" >
+        <Window Type="DefaultWindow" Name="Space/Detail" >
             <Property Name="Text" Value="Detail" />
             <Property Name="UnifiedPosition" Value="{ {0.25, 0}, {0.8, 0} }" />
             <Property Name="UnifiedSize" Value="{ {0.5, 0}, {0.2, 0} }" />
             <Window Type="TaharezLook/MultiColumnList" Name="Space/Detail/Contents" >
+                <Property Name="UnifiedPosition" Value="{ {0.0, 0}, {0.0, 0} }" />
+                <Property Name="UnifiedSize" Value="{ {1.0, 0}, {1.0, 0} }" />
+                <Property Name="ForceHorzScrollbar" Value="False" />
             </Window>
         </Window>
     </Window>
