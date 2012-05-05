@@ -256,6 +256,16 @@ Ogre::SceneManager* Application::sceneManager()
 
 void Application::addObject(Object* object)
 {
+    /**
+     * There are two nodes for every object. 
+     * 
+     * The first one ("Master") hold the second one ("Object") and the master nodes of all its children. 
+     * It is used for translations and other manipulations of the entire system. 
+     * 
+     * The object node holds only the object itself and does not affect its children. 
+     * It is used for selection, changing size or other manipulations of the object itself. 
+     */
+    
     Ogre::SceneNode* parentNode;
     if (object->parent() && mObjectNodes.contains(object->parent()))
     {
