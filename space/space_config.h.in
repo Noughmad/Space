@@ -1,0 +1,4 @@
+namespace Space
+{
+    const char* DataDir = "${SPACE_DATA_INSTALL_DIR}";
+}

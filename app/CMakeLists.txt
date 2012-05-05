@@ -6,7 +6,7 @@ set (galactomania_SRCS
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/.. ${QT_QTCORE_INCLUDE_DIR} ${OGRE_INCLUDE_DIR} ${OIS_INCLUDE_DIR})
 add_executable(galactomania ${galactomania_SRCS})
 
-target_link_libraries(galactomania space ${OGRE_LIBRARY} ${OIS_LIBRARY} ${QT_QTCORE_LIBRARY})
+target_link_libraries(galactomania Space ${OGRE_LIBRARY} ${OIS_LIBRARY} ${QT_QTCORE_LIBRARY})
 
 install(TARGETS galactomania 
     RUNTIME DESTINATION bin

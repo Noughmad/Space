@@ -1,6 +1,7 @@
 #include "application.h"
 #include "object.h"
 #include "movementmanager.h"
+#include "space_config.h"
 
 #include <OgreRoot.h>
 #include <OgreConfigFile.h>
@@ -49,10 +50,10 @@ Application::~Application()
 
 void Application::setupOgre()
 {
-    mRoot = new Ogre::Root("plugins.cfg");
+    mRoot = new Ogre::Root(Ogre::String(DataDir) + "/plugins.cfg");
 
     Ogre::ConfigFile cf;
-    cf.load("resources.cfg");
+    cf.load(Ogre::String(DataDir) + "/resources.cfg");
 
     // Go through all sections & settings in the file
     Ogre::ConfigFile::SectionIterator seci = cf.getSectionIterator();
@@ -154,23 +155,15 @@ void Application::setupGui()
     CEGUI::System::getSingleton().setDefaultMouseCursor("TaharezLook", "MouseArrow");
     
     CEGUI::WindowManager* windowManager = CEGUI::WindowManager::getSingletonPtr();
-    CEGUI::Window *sheet = windowManager->createWindow("DefaultWindow", "Space/Sheet");
+    CEGUI::Window *sheet = windowManager->loadWindowLayout(Ogre::String(DataDir) + "/space.layout");
     
-    CEGUI::Window *quit = windowManager->createWindow("TaharezLook/Button", "Space/QuitButton");
-    quit->setText("Quit");
-    quit->setSize(CEGUI::UVector2(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
+    CEGUI::Window* quit = windowManager->getWindow("Space/QuitButton");
     quit->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Application::quit, this));
-    sheet->addChildWindow(quit);
     
-    CEGUI::Window *pause = windowManager->createWindow("TaharezLook/Button", "Space/PauseButton");
-    pause->setText("Pause");
-    pause->setSize(CEGUI::UVector2(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
-    pause->setPosition(CEGUI::UVector2(CEGUI::UDim(0,0), quit->getHeight()));
+    CEGUI::Window *pause = windowManager->getWindow("Space/PauseButton");
     pause->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Application::pause, this));    
-    sheet->addChildWindow(pause);
     
-    CEGUI::System::getSingleton().setGUISheet(sheet);
-    
+    CEGUI::System::getSingleton().setGUISheet(sheet);    
 }
 
 void Application::start()
