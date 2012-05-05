@@ -32,7 +32,8 @@ CEGUI::MouseButton convertButton(OIS::MouseButtonID buttonID)
     }
 }
 
-Application::Application()
+Application::Application() :
+mSelectedObject(0)
 {
     mMovementManager = new MovementManager();
     mShutDown = false;
@@ -134,6 +135,8 @@ void Application::setupOgre()
     light->setPosition(20.0f, 80.0f, 50.0f);
     */
     
+    mRaySceneQuery = mSceneManager->createRayQuery(Ogre::Ray());
+    
     Ogre::LogManager::getSingletonPtr()->logMessage("*** Prepared to Start Rendering ***");
 }
 
@@ -152,18 +155,28 @@ void Application::setupGui()
     
     CEGUI::WindowManager* windowManager = CEGUI::WindowManager::getSingletonPtr();
     CEGUI::Window *sheet = windowManager->createWindow("DefaultWindow", "Space/Sheet");
+    
     CEGUI::Window *quit = windowManager->createWindow("TaharezLook/Button", "Space/QuitButton");
     quit->setText("Quit");
     quit->setSize(CEGUI::UVector2(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
     quit->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Application::quit, this));
-    
     sheet->addChildWindow(quit);
+    
+    CEGUI::Window *pause = windowManager->createWindow("TaharezLook/Button", "Space/PauseButton");
+    pause->setText("Pause");
+    pause->setSize(CEGUI::UVector2(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
+    pause->setPosition(CEGUI::UVector2(CEGUI::UDim(0,0), quit->getHeight()));
+    pause->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Application::pause, this));    
+    sheet->addChildWindow(pause);
+    
     CEGUI::System::getSingleton().setGUISheet(sheet);
     
 }
 
 void Application::start()
 {
+    mPause = false;
+    mShutDown = false;
     mRoot->startRendering();
 }
 
@@ -177,8 +190,11 @@ bool Application::frameRenderingQueued(const Ogre::FrameEvent& evt)
     if(mWindow->isClosed() || mShutDown)
         return false;
     
-    mMovementManager->processFrame(mSceneManager, mObjectNodes, evt.timeSinceLastEvent);
-        
+    if (!mPause)
+    {
+        mMovementManager->processFrame(mSceneManager, mObjectNodes, evt.timeSinceLastEvent);
+    }
+    
     //Need to capture/update each device
     mKeyboard->capture();
     mMouse->capture();
@@ -244,7 +260,34 @@ bool Application::mouseReleased(const OIS::MouseEvent& arg, OIS::MouseButtonID i
 
 bool Application::mousePressed(const OIS::MouseEvent& arg, OIS::MouseButtonID id)
 {
+    if (mSelectedObject)
+    {
+        mSelectedObject->showBoundingBox(false);
+    }
     CEGUI::System::getSingletonPtr()->injectMouseButtonDown(convertButton(id));
+        
+    CEGUI::Point mousePos = CEGUI::MouseCursor::getSingleton().getPosition();
+    Ogre::Ray mouseRay = mCamera->getCameraToViewportRay(mousePos.d_x/float(arg.state.width), mousePos.d_y/float(arg.state.height));
+    mRaySceneQuery->setRay(mouseRay);
+    mRaySceneQuery->setSortByDistance(true);
+    
+    // Execute query
+    Ogre::RaySceneQueryResult &result = mRaySceneQuery->execute();
+    Ogre::RaySceneQueryResult::iterator iter; 
+    
+    for ( iter = result.begin(); iter != result.end(); iter++ )
+    {
+        if ( iter->movable )
+        {
+            mSelectedObject = iter->movable->getParentSceneNode();
+            break;
+        }
+    }
+    
+    if (mSelectedObject)
+    {
+        mSelectedObject->showBoundingBox(true);
+    }
     return true;
 }
 
@@ -301,6 +344,12 @@ bool Application::quit(const CEGUI::EventArgs& e)
 {
     (void)e;
     mShutDown = true;
+    return true;
+}
+
+bool Application::pause(const CEGUI::EventArgs& e)
+{
+    mPause = !mPause;
     return true;
 }
 

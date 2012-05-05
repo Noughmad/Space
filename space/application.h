@@ -54,6 +54,7 @@ public:
     void addObject(Object* object);
     void removeObject(Object* object);
     
+    bool pause(const CEGUI::EventArgs& e);
     bool quit(const CEGUI::EventArgs& e);
     
 private:
@@ -72,6 +73,10 @@ private:
     ObjectMap mObjectNodes;
     
     bool mShutDown;
+    bool mPause;
+    
+    Ogre::SceneNode* mSelectedObject;
+    Ogre::RaySceneQuery* mRaySceneQuery;
 };
 
 }
