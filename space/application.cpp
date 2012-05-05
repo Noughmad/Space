@@ -259,13 +259,14 @@ void Application::addObject(Object* object)
     Ogre::SceneNode* parentNode;
     if (object->parent() && mObjectNodes.contains(object->parent()))
     {
-        parentNode = mObjectNodes[object->parent()];
+        parentNode = mObjectNodes[object->parent()]->getParentSceneNode();
     }
     else
     {
         parentNode = mSceneManager->getRootSceneNode();
     }
-    Ogre::SceneNode* node = parentNode->createChildSceneNode();
+    Ogre::SceneNode* node = parentNode->createChildSceneNode(object->name() + "/Master");
+    node = node->createChildSceneNode(object->name() + "/Object");
     mObjectNodes.insert(object, node);
     object->create(mSceneManager, node);
 }
