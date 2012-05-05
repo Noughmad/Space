@@ -1,7 +1,10 @@
 #include <iostream>
-#include "TutorialApplication.h"
+
+#include <OgreException.h>
+
 #include "space/application.h"
-#include <space/object.h>
+#include "space/objects/planet.h"
+#include "space/objects/star.h"
 
 using namespace Space;
 
@@ -9,12 +12,26 @@ int main(int argc, char *argv[])
 {
     Application app;
     
-    Object* star = new Object("Star", "Sun");
+    Star* star = new Star("Sun");
     star->setPosition(Coordinates(0, 0, 0));
+    star->setSize(10);
+    star->setRevolutionSpeed(0.01);
+    star->setRotationSpeed(10.0);
+    star->setLightIntensity(1.0);
     app.addObject(star);
     
-    Object* planet = new Object("Planet", "Earth", star);
-    planet->setPosition(Coordinates(20.0, -50.0, 0.0));
+    Planet* planet = new Planet("Earth", star);
+    planet->setPosition(Coordinates(2000.0, 0.0, 0.0));
+    planet->setSize(2.4);
+    planet->setRotationSpeed(0.8);
+    planet->setRevolutionSpeed(2.8);
+    app.addObject(planet);
+    
+    planet = new Planet("Mars", star);
+    planet->setPosition(Coordinates(3000.0, 1000.0, 0.0));
+    planet->setSize(1.9);
+    planet->setRotationSpeed(1.6);
+    planet->setRevolutionSpeed(1.8);
     app.addObject(planet);
  
     try 

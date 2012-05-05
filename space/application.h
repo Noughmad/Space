@@ -7,6 +7,7 @@
 #include <OISMouse.h>
 
 #include <QMap>
+#include "space_types.h"
 
 namespace Ogre {
 class SceneManager;
@@ -14,7 +15,8 @@ class SceneManager;
 }
 
 namespace Space {
-    
+
+class MovementManager;
 class Object;
 
 class Application : public Ogre::FrameListener, public Ogre::WindowEventListener, public OIS::KeyListener, public OIS::MouseListener
@@ -26,6 +28,7 @@ public:
     
     void start();
     
+    virtual bool frameStarted(const Ogre::FrameEvent& evt);
     virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
     
     virtual void windowResized(Ogre::RenderWindow* rw);
@@ -39,7 +42,9 @@ public:
     virtual bool mouseMoved(const OIS::MouseEvent& arg);
     
     Ogre::SceneManager* sceneManager();
+    
     void addObject(Object* object);
+    void removeObject(Object* object);
     
 private:
     Ogre::Root* mRoot;
@@ -50,7 +55,9 @@ private:
     OIS::Mouse* mMouse;
     OIS::Keyboard* mKeyboard;
     
-    QMap<Object*, Ogre::SceneNode*> mObjectNodes;
+    MovementManager* mMovementManager;
+    
+    ObjectMap mObjectNodes;
     
     bool mShutDown;
 };

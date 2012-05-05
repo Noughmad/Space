@@ -80,12 +80,6 @@ void Object::setParent(Object* parent)
 
 void Object::create(Ogre::SceneManager* manager, Ogre::SceneNode* node)
 {
-    Ogre::Entity* entity = manager->createEntity(mName, "sphere.mesh");
-    
-    Ogre::SceneNode* subNode = node->createChildSceneNode();
-    double s = mParent ? 0.02 : 0.1;
-    subNode->scale(s,s,s);
-    subNode->attachObject(entity);
 }
 
 

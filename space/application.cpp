@@ -1,5 +1,6 @@
 #include "application.h"
 #include "object.h"
+#include "movementmanager.h"
 
 #include <OgreRoot.h>
 #include <OgreConfigFile.h>
@@ -13,6 +14,7 @@ using namespace Space;
 
 Application::Application()
 {
+    mMovementManager = new MovementManager();
     
     mShutDown = false;
     mRoot = new Ogre::Root("plugins.cfg");
@@ -52,8 +54,8 @@ Application::Application()
     mSceneManager = mRoot->createSceneManager(Ogre::ST_EXTERIOR_REAL_FAR, "SceneManager");
     
     mCamera = mSceneManager->createCamera("PlayerCamera");
-    mCamera->setPosition(Ogre::Vector3(0,0,80));
-    mCamera->lookAt(Ogre::Vector3(0,0,-300));
+    mCamera->setPosition(Ogre::Vector3(0,0,800));
+    mCamera->lookAt(Ogre::Vector3(0,0,-3000));
     mCamera->setNearClipDistance(5);
     
     // Create one viewport, entire window
@@ -96,8 +98,10 @@ Application::Application()
     mSceneManager->setAmbientLight(Ogre::ColourValue(0.5f, 0.5f, 0.5f));
   
     // Create a Light and set its position
+    /*
     Ogre::Light* light = mSceneManager->createLight("MainLight");
     light->setPosition(20.0f, 80.0f, 50.0f);
+    */
     
     Ogre::LogManager::getSingletonPtr()->logMessage("*** Prepared to Start Rendering ***");
 }
@@ -112,18 +116,18 @@ void Application::start()
     mRoot->startRendering();
 }
 
+bool Application::frameStarted(const Ogre::FrameEvent& evt)
+{
+    return true;
+}
+
 bool Application::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {   
     if(mWindow->isClosed() || mShutDown)
         return false;
     
-    foreach (Ogre::SceneNode* node, mObjectNodes)
-    {
-      //  node->roll(Ogre::Radian(evt.timeSinceLastEvent));
-    }
+    mMovementManager->processFrame(mSceneManager, mObjectNodes, evt.timeSinceLastEvent);
     
-    mSceneManager->getRootSceneNode()->roll(Ogre::Radian(evt.timeSinceLastEvent));
-
     //Need to capture/update each device
     mKeyboard->capture();
     mMouse->capture();
@@ -212,7 +216,15 @@ void Application::addObject(Object* object)
     {
         parentNode = mSceneManager->getRootSceneNode();
     }
-    Ogre::SceneNode* node = parentNode->createChildSceneNode(object->position());
+    Ogre::SceneNode* node = parentNode->createChildSceneNode();
     mObjectNodes.insert(object, node);
     object->create(mSceneManager, node);
 }
+
+void Application::removeObject(Object* object)
+{
+    Ogre::SceneNode* node = mObjectNodes[object];
+    mSceneManager->getRootSceneNode()->removeChild(node);
+    delete node;
+}
+
