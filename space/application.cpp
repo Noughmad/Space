@@ -37,10 +37,11 @@ MouseButton convertButton(OIS::MouseButtonID buttonID)
 }
 
 Application::Application() :
-mSelectedObject(0)
+mSelectedObject(0),
+mShutDown(false),
+mMousePressedInField(false)
 {
     mMovementManager = new MovementManager();
-    mShutDown = false;
     
     setupOgre();
     setupGui();
@@ -154,6 +155,7 @@ bool Application::keyPressed(const OIS::KeyEvent& arg)
 
 bool Application::mouseReleased(const OIS::MouseEvent& arg, OIS::MouseButtonID id)
 {
+    mMousePressedInField = false;
     return System::getSingletonPtr()->injectMouseButtonUp(convertButton(id));
 }
 
@@ -231,25 +233,37 @@ bool Application::mousePressed(const OIS::MouseEvent& arg, OIS::MouseButtonID id
         // Right mouse button is for giving orders
         // TODO: Make things to which you could give orders
     }
+    
+    mMousePressedInField = true;
     return true;
 }
 
 bool Application::mouseMoved(const OIS::MouseEvent& arg)
 {
-    if (arg.state.buttonDown(OIS::MB_Right))
+    if (mMousePressedInField)
     {
-        mCamera->moveRelative(Ogre::Vector3(arg.state.X.rel, -arg.state.Y.rel, 0));
-    }
-    else if (int dz = arg.state.Z.rel)
-    {
-        mCamera->moveRelative(Ogre::Vector3(0, 0, -dz));
+        if (arg.state.buttonDown(OIS::MB_Right))
+        {
+            mCameraCenterNode->translate(Ogre::Vector3(arg.state.X.rel, -arg.state.Y.rel, 0), Ogre::Node::TS_LOCAL);
+        }
+        else if (arg.state.buttonDown(OIS::MB_Middle))
+        {
+            mCameraPitchNode->pitch(Ogre::Radian(arg.state.Y.rel) * 0.03, Ogre::Node::TS_PARENT);
+            mCameraCenterNode->roll(Ogre::Radian(arg.state.X.rel) * 0.03, Ogre::Node::TS_PARENT);
+        }
+        return true;
     }
     
     System* sys = System::getSingletonPtr();
-    sys->injectMouseMove(arg.state.X.rel, arg.state.Y.rel);
+    bool accepted = sys->injectMouseMove(arg.state.X.rel, arg.state.Y.rel);
     if (arg.state.Z.rel)
     {
-        sys->injectMouseWheelChange(arg.state.Z.rel / 120.0f);
+        accepted |= sys->injectMouseWheelChange(arg.state.Z.rel / 120.0f);
+    }
+    
+    if (accepted)
+    {
+        return true;
     }
     
     return true;

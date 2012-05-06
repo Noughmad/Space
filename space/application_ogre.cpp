@@ -47,7 +47,10 @@ void Application::setupOgre()
     
     mSceneManager = mRoot->createSceneManager(ST_EXTERIOR_REAL_FAR, "SceneManager");
     
-    SceneNode* cameraNode = mSceneManager->getRootSceneNode()->createChildSceneNode("CameraNode", Vector3(0,0,2000));
+    mCameraCenterNode = mSceneManager->getRootSceneNode()->createChildSceneNode("CameraCenter");
+    mCameraPitchNode = mCameraCenterNode->createChildSceneNode("CameraPitch");
+    
+    SceneNode* cameraNode = mCameraPitchNode->createChildSceneNode("CameraNode", Vector3(0,0,2000));
     cameraNode->lookAt(Vector3(0, 0, 0), Node::TS_WORLD);
     
     mCamera = mSceneManager->createCamera("PlayerCamera");

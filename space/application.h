@@ -76,9 +76,12 @@ private:
     
     bool mShutDown;
     bool mPause;
+    bool mMousePressedInField;
     
     Ogre::SceneNode* mSelectedObject;
     Ogre::RaySceneQuery* mRaySceneQuery;
+    Ogre::SceneNode* mCameraCenterNode;
+    Ogre::SceneNode* mCameraPitchNode;
 };
 
 }
