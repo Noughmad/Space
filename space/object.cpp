@@ -18,6 +18,7 @@
 */
 
 #include "object.h"
+#include "objecttype.h"
 
 #include <OgreSceneNode.h>
 #include <OgreSceneManager.h>
@@ -78,8 +79,9 @@ void Object::setParent(Object* parent)
     mParent = parent;
 }
 
-void Object::create(Ogre::SceneManager* manager, Ogre::SceneNode* node)
+void Object::create(Ogre::SceneManager* manager, Ogre::SceneNode* node, const ObjectType& type)
 {
+    
 }
 
 

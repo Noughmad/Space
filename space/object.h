@@ -23,6 +23,9 @@
 #include "space_export.h"
 #include "space_types.h"
 
+#include "string.h"
+
+class QStringList;
 namespace Ogre
 {
     class SceneNode;
@@ -30,6 +33,7 @@ namespace Ogre
 }
 
 namespace Space {
+struct ObjectType;
 
 class SPACE_EXPORT Object
 {
@@ -50,13 +54,13 @@ public:
     Object* parent() const;
     void setParent(Object* parent);
         
-    virtual void create(Ogre::SceneManager* manager, Ogre::SceneNode* node);
+    virtual void create(Ogre::SceneManager* manager, Ogre::SceneNode* node, const ObjectType& type);
     
 private:
     String mType;
     String mName;
     Coordinates mPosition;
-    Object* mParent;    
+    Object* mParent;  
 };
 
 }

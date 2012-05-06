@@ -3,8 +3,7 @@
 #include <OgreException.h>
 
 #include "space/application.h"
-#include "space/objects/planet.h"
-#include "space/objects/star.h"
+#include "space/objects/celestialobject.h"
 
 using namespace Space;
 
@@ -12,26 +11,38 @@ int main(int argc, char *argv[])
 {
     Application app;
     
-    Star* star = new Star("Sun");
+    ObjectType starType;
+    starType.identifier = "Star/Yellow";
+    starType.mesh = "Star.mesh";
+    starType.material = "StellarMatter.material";
+    app.registerObjectType(starType);
+    
+    ObjectType planetType;
+    planetType.identifier = "Planet/Earth";
+    planetType.mesh = "Planet.mesh";
+    planetType.material = "Earth.material";
+    app.registerObjectType(planetType);
+    
+    CelestialObject* star = new CelestialObject(starType.identifier, "Sun");
     star->setPosition(Coordinates(0, 0, 0));
     star->setSize(10);
     star->setRevolutionSpeed(0.01);
-    star->setRotationSpeed(20.0);
+    star->setRotationSpeed(4.0);
     star->setLightIntensity(1.0);
     app.addObject(star);
     
-    Planet* planet = new Planet("Earth", star);
+    CelestialObject* planet = new CelestialObject(planetType.identifier, "Earth", star);
     planet->setPosition(Coordinates(400.0, 0.0, 0.0));
     planet->setSize(2.4);
-    planet->setRotationSpeed(0.8);
-    planet->setRevolutionSpeed(2.8);
+    planet->setRotationSpeed(10);
+    planet->setRevolutionSpeed(0.1);
     app.addObject(planet);
     
-    planet = new Planet("Mars", star);
+    planet = new CelestialObject(planetType.identifier, "Mars", star);
     planet->setPosition(Coordinates(500.0, 100.0, 0.0));
     planet->setSize(1.9);
-    planet->setRotationSpeed(1.6);
-    planet->setRevolutionSpeed(1.8);
+    planet->setRotationSpeed(13);
+    planet->setRevolutionSpeed(0.06);
     app.addObject(planet);
  
     try 

@@ -10,5 +10,8 @@ install(FILES
     Star.mesh
     StarSurface.png
     StellarMatter.material
+    Planet.mesh
+    earth.material
+    earth.jpg
     DESTINATION ${SPACE_DATA_INSTALL_DIR}
 )

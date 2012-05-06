@@ -17,7 +17,7 @@ public:
     CelestialObject(const Space::String& type, const Space::String& name, Space::Object* parent = 0);
     virtual ~CelestialObject();
     
-    virtual void create(Ogre::SceneManager* manager, Ogre::SceneNode* node);
+    virtual void create(Ogre::SceneManager* manager, Ogre::SceneNode* node, const ObjectType& type);
     
     Real rotationSpeed() const;
     void setRotationSpeed(Real speed);

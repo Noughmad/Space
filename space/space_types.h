@@ -6,6 +6,7 @@
 #include <OgreVector3.h>
 
 #include <QMap>
+#include <QString>
 
 #include "space_export.h"
 
@@ -18,7 +19,6 @@ namespace Space
 
 class Object;
 
-typedef Ogre::String String;
 typedef Ogre::Real Real;
 
 typedef Ogre::Vector3 Coordinates;

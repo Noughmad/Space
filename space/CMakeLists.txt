@@ -1,5 +1,7 @@
 
 set (space_SRCS 
+    string.cpp 
+    objecttype.cpp 
     object.cpp    
     objects/celestialobject.cpp 
     objects/planet.cpp 

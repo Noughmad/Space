@@ -1,4 +1,7 @@
 #include "celestialobject.h"
+#include "../objecttype.h"
+
+#include <QStringList>
 
 #include <OgreSceneManager.h>
 #include <OgreEntity.h>
@@ -19,10 +22,10 @@ CelestialObject::~CelestialObject()
 
 }
 
-void CelestialObject::create(Ogre::SceneManager* manager, Ogre::SceneNode* node)
+void CelestialObject::create(Ogre::SceneManager* manager, Ogre::SceneNode* node, const ObjectType& type)
 {
     Ogre::SceneNode* subNode = node->createChildSceneNode(name() + "/RotationNode", position());
-    Real s = mSize / 10.0;
+    Real s = mSize * 10.0;
     
     if (mLightIntensity > 0)
     {
@@ -30,28 +33,24 @@ void CelestialObject::create(Ogre::SceneManager* manager, Ogre::SceneNode* node)
         mLight->setType(Ogre::Light::LT_POINT);
         subNode->attachObject(mLight);
     }
-    
-    String entityName;
-    
-    if (type() == "Star")
+        
+    if (type.identifier.split('/').contains("Star"))
     {
         Ogre::SceneNode* particlesNode = subNode->createChildSceneNode(name() + "/ParticlesNode");
         particlesNode->scale(0.6, 0.6, 0.6);
-        s = mSize * 10;
         Ogre::ParticleSystem* particleSystem = manager->createParticleSystem(name() + "/Particles", "Space/Star");
         particleSystem->fastForward(10.0);
         particlesNode->attachObject(particleSystem);
-        
-        entityName = "Star.mesh";
     }
-    else
+    else if (type.identifier.split('/').contains("Planet"))
     {
-        entityName = "sphere.mesh";
+        subNode = subNode->createChildSceneNode(name() + "/BaseNode");
+        subNode->pitch(Ogre::Degree(90));
     }
 
     subNode->setScale(s,s,s);
     
-    Ogre::Entity* entity = manager->createEntity(name(), entityName);
+    Ogre::Entity* entity = manager->createEntity(name(), type.mesh);
     subNode->attachObject(entity);
 }
 
