@@ -34,7 +34,7 @@ void CelestialObject::create(Ogre::SceneManager* manager, Ogre::SceneNode* node,
         subNode->attachObject(mLight);
     }
         
-    if (type.identifier.split('/').contains("Star"))
+    if (type.type() == "Star")
     {
         Ogre::SceneNode* particlesNode = subNode->createChildSceneNode(name() + "/ParticlesNode");
         particlesNode->scale(0.6, 0.6, 0.6);
@@ -42,15 +42,19 @@ void CelestialObject::create(Ogre::SceneManager* manager, Ogre::SceneNode* node,
         particleSystem->fastForward(10.0);
         particlesNode->attachObject(particleSystem);
     }
-    else if (type.identifier.split('/').contains("Planet"))
+    else if (type.type() == "Planet")
     {
         subNode = subNode->createChildSceneNode(name() + "/BaseNode");
         subNode->pitch(Ogre::Degree(90));
     }
-
+    
     subNode->setScale(s,s,s);
     
-    Ogre::Entity* entity = manager->createEntity(name(), type.mesh);
+    Ogre::Entity* entity = manager->createEntity(name(), type.type() + ".mesh");
+    if (!Ogre::MaterialManager::getSingletonPtr()->getByName(type.subType()).isNull())
+    {
+        entity->setMaterialName(type.subType());
+    }
     subNode->attachObject(entity);
 }
 

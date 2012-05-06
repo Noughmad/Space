@@ -284,7 +284,14 @@ void Application::addObject(Object* object)
     Ogre::SceneNode* node = parentNode->createChildSceneNode(object->name() + "/Master");
     node = node->createChildSceneNode(object->name() + "/Object");
     mObjectNodes.insert(object, node);
-    object->create(mSceneManager, node, mObjectTypes.value(object->type()));
+    
+    String id = object->type();
+    if (!mObjectTypes.contains(id))
+    {
+        mObjectTypes[id] = ObjectType(id);
+    }
+    
+    object->create(mSceneManager, node, mObjectTypes[object->type()]);
 }
 
 void Application::removeObject(Object* object)
@@ -306,10 +313,3 @@ bool Application::pause(const EventArgs& e)
     mPause = !mPause;
     return true;
 }
-
-void Application::registerObjectType(const ObjectType& type)
-{
-    mObjectTypes.insert(type.identifier, type);
-}
-
-

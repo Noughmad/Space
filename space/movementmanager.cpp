@@ -15,7 +15,7 @@ MovementManager::~MovementManager()
 
 void MovementManager::processFrame(Ogre::SceneManager* sceneManager, ObjectMap objects, Real timeSinceLastFrame)
 {
-    const Real factor = 0.1;
+    const Real factor = 0.2;
     
     ObjectMap::iterator it = objects.begin();
     ObjectMap::iterator end = objects.end();

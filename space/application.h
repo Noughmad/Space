@@ -58,8 +58,6 @@ public:
     bool pause(const CEGUI::EventArgs& e);
     bool quit(const CEGUI::EventArgs& e);
     
-    void registerObjectType(const ObjectType& type);
-    
 private:
     Ogre::Root* mRoot;
     Ogre::SceneManager* mSceneManager;
