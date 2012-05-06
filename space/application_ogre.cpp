@@ -50,7 +50,7 @@ void Application::setupOgre()
     mCameraCenterNode = mSceneManager->getRootSceneNode()->createChildSceneNode("CameraCenter");
     mCameraPitchNode = mCameraCenterNode->createChildSceneNode("CameraPitch");
     
-    SceneNode* cameraNode = mCameraPitchNode->createChildSceneNode("CameraNode", Vector3(0,0,2000));
+    SceneNode* cameraNode = mCameraPitchNode->createChildSceneNode("CameraNode", Vector3(0,0,4000));
     cameraNode->lookAt(Vector3(0, 0, 0), Node::TS_WORLD);
     
     mCamera = mSceneManager->createCamera("PlayerCamera");
