@@ -1,0 +1,24 @@
+
+// blender material: StellarMatter
+material StellarMatter 
+{
+    receive_shadows off
+    technique
+    {
+        pass
+        {
+            ambient 0.800000011920929 0.6624787449836731 0.0 1.0
+            diffuse 0.6400000190734865 0.5299830038843005 0.0 1.0
+            specular 0.5 0.5 0.5 1.0 12.5
+            emissive 0.6 0.4 0.0 0.0
+            
+            texture_unit
+            {
+                texture StarSurface.png
+                colour_op replace
+                tex_address_mode wrap
+                scale 1.0 1.0
+            }
+        }
+    }
+}

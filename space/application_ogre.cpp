@@ -47,10 +47,22 @@ void Application::setupOgre()
     
     mSceneManager = mRoot->createSceneManager(ST_EXTERIOR_REAL_FAR, "SceneManager");
     
+    SceneNode* cameraNode = mSceneManager->getRootSceneNode()->createChildSceneNode("CameraNode", Vector3(0,0,2000));
+    cameraNode->lookAt(Vector3(0, 0, 0), Node::TS_PARENT);
+    
     mCamera = mSceneManager->createCamera("PlayerCamera");
-    mCamera->setPosition(Vector3(0,0,800));
-    mCamera->lookAt(Vector3(0,0,-3000));
+    mCamera->setDirection(0, 0, 1);
+    cameraNode->attachObject(mCamera);
+    
+    SceneNode* lightNode = cameraNode->createChildSceneNode(Vector3(0, 0, -2000));
+    
+    Light* light = mSceneManager->createLight("CameraLight");
+    light->setType(Light::LT_DIRECTIONAL);
+    light->setDirection(0, 0, 1);
+    lightNode->attachObject(light);
+    
     mCamera->setNearClipDistance(5);
+    mCamera->setFarClipDistance(10000);
     
     // Create one viewport, entire window
     Viewport* vp = mWindow->addViewport(mCamera);

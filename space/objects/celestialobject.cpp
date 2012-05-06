@@ -21,27 +21,38 @@ CelestialObject::~CelestialObject()
 
 void CelestialObject::create(Ogre::SceneManager* manager, Ogre::SceneNode* node)
 {
-    Ogre::Entity* entity = manager->createEntity(name(), "sphere.mesh");
-
     Ogre::SceneNode* subNode = node->createChildSceneNode(name() + "/RotationNode", position());
     Real s = mSize / 10.0;
-    subNode->setScale(s,s,s);
-    subNode->attachObject(entity);
     
     if (mLightIntensity > 0)
     {
         mLight = manager->createLight(name() + "/Light");
+        mLight->setType(Ogre::Light::LT_POINT);
         subNode->attachObject(mLight);
     }
+    
+    String entityName;
     
     if (type() == "Star")
     {
         Ogre::SceneNode* particlesNode = subNode->createChildSceneNode(name() + "/ParticlesNode");
-        Real ps = 50;
-        particlesNode->setScale(ps, ps, ps);
+        particlesNode->scale(0.6, 0.6, 0.6);
+        s = mSize * 10;
         Ogre::ParticleSystem* particleSystem = manager->createParticleSystem(name() + "/Particles", "Space/Star");
+        particleSystem->fastForward(10.0);
         particlesNode->attachObject(particleSystem);
+        
+        entityName = "Star.mesh";
     }
+    else
+    {
+        entityName = "sphere.mesh";
+    }
+
+    subNode->setScale(s,s,s);
+    
+    Ogre::Entity* entity = manager->createEntity(name(), entityName);
+    subNode->attachObject(entity);
 }
 
 Real CelestialObject::rotationSpeed() const

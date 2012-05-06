@@ -16,19 +16,19 @@ int main(int argc, char *argv[])
     star->setPosition(Coordinates(0, 0, 0));
     star->setSize(10);
     star->setRevolutionSpeed(0.01);
-    star->setRotationSpeed(10.0);
+    star->setRotationSpeed(20.0);
     star->setLightIntensity(1.0);
     app.addObject(star);
     
     Planet* planet = new Planet("Earth", star);
-    planet->setPosition(Coordinates(2000.0, 0.0, 0.0));
+    planet->setPosition(Coordinates(400.0, 0.0, 0.0));
     planet->setSize(2.4);
     planet->setRotationSpeed(0.8);
     planet->setRevolutionSpeed(2.8);
     app.addObject(planet);
     
     planet = new Planet("Mars", star);
-    planet->setPosition(Coordinates(3000.0, 1000.0, 0.0));
+    planet->setPosition(Coordinates(500.0, 100.0, 0.0));
     planet->setSize(1.9);
     planet->setRotationSpeed(1.6);
     planet->setRevolutionSpeed(1.8);
