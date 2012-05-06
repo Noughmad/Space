@@ -58,6 +58,8 @@ public:
     bool pause(const CEGUI::EventArgs& e);
     bool quit(const CEGUI::EventArgs& e);
     
+    void updateMap();
+    
 private:
     Ogre::Root* mRoot;
     Ogre::SceneManager* mSceneManager;
@@ -82,6 +84,7 @@ private:
     Ogre::RaySceneQuery* mRaySceneQuery;
     Ogre::SceneNode* mCameraCenterNode;
     Ogre::SceneNode* mCameraPitchNode;
+    Ogre::Camera* mMapCamera;
 };
 
 }

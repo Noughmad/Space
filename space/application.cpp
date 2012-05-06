@@ -5,8 +5,10 @@
 #include "space_config.h"
 
 #include <OgreRenderWindow.h>
+#include <OgreHardwarePixelBuffer.h>
 
 #include <CEGUI.h>
+#include <CEGUIImageset.h>
 #include <RendererModules/Ogre/CEGUIOgreRenderer.h>
 
 #include <QtCore/QMap>
@@ -45,6 +47,7 @@ mMousePressedInField(false)
     
     setupOgre();
     setupGui();
+    updateMap();
 }
 
 Application::~Application()
@@ -94,6 +97,7 @@ bool Application::frameRenderingQueued(const Ogre::FrameEvent& evt)
     if (!mPause)
     {
         mMovementManager->processFrame(mSceneManager, mObjectNodes, evt.timeSinceLastEvent);
+        CEGUI::WindowManager::getSingletonPtr()->getWindow("Space/Minimap")->invalidateRenderingSurface();
     }
     
     //Need to capture/update each device
@@ -248,8 +252,8 @@ bool Application::mouseMoved(const OIS::MouseEvent& arg)
         }
         else if (arg.state.buttonDown(OIS::MB_Middle))
         {
-            mCameraPitchNode->pitch(Ogre::Radian(arg.state.Y.rel) * 0.03, Ogre::Node::TS_PARENT);
-            mCameraCenterNode->roll(Ogre::Radian(arg.state.X.rel) * 0.03, Ogre::Node::TS_PARENT);
+            mCameraPitchNode->pitch(Ogre::Radian(arg.state.Y.rel) * 0.005, Ogre::Node::TS_PARENT);
+            mCameraCenterNode->roll(Ogre::Radian(arg.state.X.rel) * 0.005, Ogre::Node::TS_PARENT);
         }
         return true;
     }
@@ -327,3 +331,28 @@ bool Application::pause(const EventArgs& e)
     mPause = !mPause;
     return true;
 }
+
+void Application::updateMap()
+{
+    mMapCamera = mSceneManager->createCamera("MinimapCamera");
+    mMapCamera->setPosition(0.0, 0.0, 4000.0);
+    mMapCamera->lookAt(0.0, 0.0, 0.0);
+    
+    Ogre::TexturePtr texture = Ogre::TextureManager::getSingletonPtr()->createManual("Minimap",
+                                Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, 
+                                Ogre::TEX_TYPE_2D, 512, 512, 0, 
+                                Ogre::PF_R8G8B8, Ogre::TU_RENDERTARGET);
+    Ogre::RenderTexture* renderTexture = texture->getBuffer()->getRenderTarget();
+    
+    renderTexture->addViewport(mMapCamera);
+    renderTexture->getViewport(0)->setBackgroundColour(Ogre::ColourValue::Black);
+    renderTexture->getViewport(0)->setOverlaysEnabled(false);
+    
+    CEGUI::Texture& guiTexture = mGuiRenderer->createTexture(texture);
+    CEGUI::Imageset& imageset = CEGUI::ImagesetManager::getSingleton().create("MinimapImageset", guiTexture);
+    imageset.defineImage("MinimapImage", CEGUI::Point(0, 0), CEGUI::Size(512, 512), CEGUI::Point(0, 0));
+    
+    CEGUI::Window* window = CEGUI::WindowManager::getSingletonPtr()->getWindow("Space/Minimap");
+    window->setProperty("Image", CEGUI::PropertyHelper::imageToString(&imageset.getImage("MinimapImage")));
+}
+

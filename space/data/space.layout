@@ -34,5 +34,11 @@
                 <Property Name="ForceHorzScrollbar" Value="False" />
             </Window>
         </Window>
+        
+        <Window Type="TaharezLook/StaticImage" Name="Space/Minimap" >
+            <Property Name="Text" Value="Map" />
+            <Property Name="UnifiedPosition" Value="{ {0.75, 0}, {0.75, 0} }" />
+            <Property Name="UnifiedSize" Value="{ {0.25, 0}, {0.25, 0} }" />
+        </Window>
     </Window>
 </GUILayout>
