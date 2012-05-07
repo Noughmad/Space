@@ -228,6 +228,10 @@ bool Application::mousePressed(const OIS::MouseEvent& arg, OIS::MouseButtonID id
                 select(0);
             }
         }
+        else
+        {
+            select(0);
+        }
     }
     else if (id = OIS::MB_Right)
     {
@@ -380,6 +384,7 @@ void Application::select(Ogre::SceneNode* node)
     if (markerNode && markerNode->isInSceneGraph())
     {
         markerNode->getParentSceneNode()->removeChild(markerNode);
+        markerNode->setVisible(false);
     }
     
     mSelectedObject = node;
@@ -394,6 +399,7 @@ void Application::select(Ogre::SceneNode* node)
     if (markerNode)
     {
         node->addChild(markerNode);
+        markerNode->setVisible(true);
     }
     else
     {
