@@ -1,4 +1,4 @@
-set (Space_Objects_SRCS
+set (Space_Objects_SRCS ship.cpp
     star.cpp
     planet.cpp
 )
