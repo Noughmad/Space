@@ -25,7 +25,7 @@ String Planet::typeId() const
     return "Celestial/Planet/" + getProperty<String>("SubType");
 }
 
-void Planet::create(Ogre::SceneManager* manager, Ogre::SceneNode* node)
+Ogre::SceneNode* Planet::create(Ogre::SceneManager* manager, Ogre::SceneNode* node)
 {
     Ogre::SceneNode* subNode = node->createChildSceneNode(id() + "/RotationNode", position());
     Real size = getProperty<Real>("Size");
@@ -42,5 +42,6 @@ void Planet::create(Ogre::SceneManager* manager, Ogre::SceneNode* node)
         entity->setMaterialName(subType);
     }
     subNode->attachObject(entity);
+    return subNode;
 }
 

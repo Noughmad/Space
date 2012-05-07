@@ -5,6 +5,8 @@
 
 #include <OgreRenderWindow.h>
 #include <OgreHardwarePixelBuffer.h>
+#include <OgreBillboardSet.h>
+#include <OgreBillboard.h>
 
 #include <CEGUI.h>
 #include <CEGUIImageset.h>
@@ -95,7 +97,7 @@ bool Application::frameRenderingQueued(const Ogre::FrameEvent& evt)
     
     if (!mPause)
     {
-        mMovementManager->processFrame(mSceneManager, mObjectNodes, evt.timeSinceLastEvent);
+        mMovementManager->processFrame(mSceneManager, mTopNodes, evt.timeSinceLastEvent);
         CEGUI::WindowManager::getSingletonPtr()->getWindow("Space/Minimap")->invalidateRenderingSurface();
     }
     
@@ -187,32 +189,30 @@ bool Application::mousePressed(const OIS::MouseEvent& arg, OIS::MouseButtonID id
         // Execute query
         Ogre::RaySceneQueryResult &result = mRaySceneQuery->execute();
         Ogre::RaySceneQueryResult::iterator iter; 
-        mSelectedObject = 0;
+        Ogre::SceneNode* selected = 0;
         for ( iter = result.begin(); iter != result.end(); iter++ )
         {
             if ( iter->movable )
             {
-                mSelectedObject = iter->movable->getParentSceneNode();
+                selected = iter->movable->getParentSceneNode();
                 break;
             }
         }
         
-        if (mSelectedObject)
+        if (selected)
         {
-            IObject* object = mObjectNodes.key(mSelectedObject);
+            IObject* object = mObjectNodes.key(selected);
             Ogre::SceneNode* root = mSceneManager->getRootSceneNode();
             
-            while (!object && (mSelectedObject != root) )
+            while (!object && (selected != root) )
             {
-                mSelectedObject = mSelectedObject->getParentSceneNode();
-                object = mObjectNodes.key(mSelectedObject);
+                selected = selected->getParentSceneNode();
+                object = mObjectNodes.key(selected);
             }
             
-            Ogre::LogManager::getSingletonPtr()->logMessage("Finished loop to traverse the graph");
-
             if (object)
             {
-                mSelectedObject->showBoundingBox(true);
+                select(selected);
                 
                 int i = 0;
                 foreach (const String& property, object->propertyNames())
@@ -222,6 +222,10 @@ bool Application::mousePressed(const OIS::MouseEvent& arg, OIS::MouseButtonID id
                     details->setItem(new ListboxTextItem(object->getProperty(property).toString().toStdString()), 2, i);
                     ++i;
                 }
+            }
+            else
+            {
+                select(0);
             }
         }
     }
@@ -304,7 +308,7 @@ void Application::addObject(IObject* object)
     Ogre::SceneNode* parentNode;
     if (object->parent() && mObjectNodes.contains(object->parent()))
     {
-        parentNode = mObjectNodes[object->parent()]->getParentSceneNode();
+        parentNode = mTopNodes[object->parent()]->getParentSceneNode();
     }
     else
     {
@@ -312,9 +316,8 @@ void Application::addObject(IObject* object)
     }
     Ogre::SceneNode* node = parentNode->createChildSceneNode(object->id() + "/Master");
     node = node->createChildSceneNode(object->id() + "/Object");
-    mObjectNodes.insert(object, node);
-    
-    object->create(mSceneManager, node);
+    mTopNodes.insert(object, node);
+    mObjectNodes.insert(object, object->create(mSceneManager, node));
 }
 
 void Application::removeObject(IObject* object)
@@ -360,4 +363,47 @@ void Application::updateMap()
     CEGUI::Window* window = CEGUI::WindowManager::getSingletonPtr()->getWindow("Space/Minimap");
     window->setProperty("Image", CEGUI::PropertyHelper::imageToString(&imageset.getImage("MinimapImage")));
 }
+
+void Application::select(Ogre::SceneNode* node)
+{
+    // First remove any current selections
+    Ogre::SceneNode* markerNode;
+    try
+    {
+        markerNode = mSceneManager->getSceneNode("SelectionMarker");
+    }
+    catch (Ogre::ItemIdentityException& e)
+    {
+        markerNode = 0;
+    }
+    
+    if (markerNode && markerNode->isInSceneGraph())
+    {
+        markerNode->getParentSceneNode()->removeChild(markerNode);
+    }
+    
+    mSelectedObject = node;
+    
+    if (!node)
+    {
+        return;
+    }
+    
+    // If something was selected, attach the marker to its node
+    
+    if (markerNode)
+    {
+        node->addChild(markerNode);
+    }
+    else
+    {
+        markerNode = node->createChildSceneNode("SelectionMarker");
+        markerNode->setScale(0.05, 0.05, 0.05);
+        Ogre::BillboardSet* set = mSceneManager->createBillboardSet("SelectionMarkerSet", 1);
+        set->setMaterialName("SelectionMarker");
+        set->createBillboard(0, 0, 0);
+        markerNode->attachObject(set);
+    }
+}
+
 

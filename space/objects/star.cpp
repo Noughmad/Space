@@ -23,7 +23,7 @@ String Star::typeId() const
     return "Celestial/Star";
 }
 
-void Star::create(Ogre::SceneManager* manager, Ogre::SceneNode* node)
+SceneNode* Star::create(SceneManager* manager, SceneNode* node)
 {
     Ogre::SceneNode* subNode = node->createChildSceneNode(id() + "/RotationNode", position());
     Real size = getProperty<Real>("Size");
@@ -46,4 +46,5 @@ void Star::create(Ogre::SceneManager* manager, Ogre::SceneNode* node)
         entity->setMaterialName(getProperty<String>("SubType"));
     }
     subNode->attachObject(entity);
+    return subNode;
 }

@@ -58,6 +58,7 @@ public:
     bool quit(const CEGUI::EventArgs& e);
     
     void updateMap();
+    void select(Ogre::SceneNode* node);
     
 private:
     Ogre::Root* mRoot;
@@ -73,6 +74,7 @@ private:
     MovementManager* mMovementManager;
     
     ObjectMap mObjectNodes;
+    ObjectMap mTopNodes;
     
     bool mShutDown;
     bool mPause;

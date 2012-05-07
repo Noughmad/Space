@@ -26,7 +26,7 @@ public:
     
     virtual String typeId() const = 0;
 
-    virtual void create(Ogre::SceneManager* manager, Ogre::SceneNode* node) = 0;
+    virtual Ogre::SceneNode* create(Ogre::SceneManager* manager, Ogre::SceneNode* node) = 0;
     
     QVariant getProperty(const String& name) const;
     void setProperty(const String& name, const QVariant& value);

@@ -1,0 +1,18 @@
+material SelectionMarker 
+{
+    receive_shadows off
+    technique
+    {
+        pass 
+        {
+            texture_unit 
+            {
+                texture select.png
+                colour_op replace
+                tex_address_mode clamp
+                wave_xform scale_x sine 0.8 0.2 0 0.2
+                wave_xform scale_y sine 0.8 0.2 0 0.2
+            }
+        }
+    }
+}

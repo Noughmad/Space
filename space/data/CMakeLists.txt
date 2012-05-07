@@ -14,5 +14,7 @@ install(FILES
     earth.material
     earth.jpg
     mars.jpg
+    select.material
+    select.png
     DESTINATION ${SPACE_DATA_INSTALL_DIR}
 )

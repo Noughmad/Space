@@ -15,7 +15,7 @@ public:
     
     virtual String typeId() const;
     
-    virtual void create(Ogre::SceneManager* manager, Ogre::SceneNode* node);
+    virtual Ogre::SceneNode* create(Ogre::SceneManager* manager, Ogre::SceneNode* node);
 };
 
 SPACE_DECLARE_FACTORY("Celestial/Star", Star)
