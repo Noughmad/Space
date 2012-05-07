@@ -23,7 +23,7 @@
 #include "space_export.h"
 #include "space_types.h"
 
-#include "string.h"
+#include "core/string.h"
 
 class QStringList;
 namespace Ogre

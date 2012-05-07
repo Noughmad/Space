@@ -1,7 +1,7 @@
 #ifndef SPACE_OBJECTTYPE_H
 #define SPACE_OBJECTTYPE_H
 
-#include "string.h"
+#include "core/string.h"
 
 #include <QHash>
 #include <QStringList>
@@ -27,7 +27,7 @@ public:
     
 private:
     String mIdentifier;
-    QStringList mIdList;
+    StringList mIdList;
 };
 
 

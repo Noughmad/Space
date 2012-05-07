@@ -15,7 +15,7 @@ ObjectType::ObjectType(const String& identifier)
 void ObjectType::setIdentifier(const String& identifier)
 {
     mIdentifier = identifier;
-    mIdList = identifier.split('/', QString::KeepEmptyParts);
+    mIdList = split(identifier);
     while (mIdList.size() < 3)
     {
         mIdList << "None";

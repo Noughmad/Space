@@ -1,7 +1,26 @@
 #include "string.h"
-#include <CEGUIString.h>
+#include <QStringList>
 
 using namespace Space;
+
+StringList split(const String& str)
+{
+    StringList list;
+    foreach (const QString qs, QString::fromStdString(str).split('/'))
+    {
+        list << qs.toStdString();
+    }
+    return list;
+}
+
+uint qHash(const String& str)
+{
+    return qHash(str.c_str());
+}
+
+
+
+/*
 
 String::String() : QString()
 {
@@ -48,3 +67,5 @@ String Space::operator+(const String& str, const char* ch)
 {
     return String(str.mid(0) + ch);
 }
+
+*/

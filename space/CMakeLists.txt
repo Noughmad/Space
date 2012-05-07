@@ -1,6 +1,5 @@
 
-set (space_SRCS 
-    string.cpp 
+set (space_SRCS
     objecttype.cpp 
     object.cpp    
     objects/celestialobject.cpp 
@@ -24,7 +23,7 @@ include_directories(
 )
 
 add_library(Space SHARED ${space_SRCS})
-target_link_libraries(Space ${OGRE_LIBRARY} ${QT_QTCORE_LIBRARY} CEGUIBase CEGUIOgreRenderer)
+target_link_libraries(Space SpaceCore ${OGRE_LIBRARY} ${QT_QTCORE_LIBRARY} CEGUIBase CEGUIOgreRenderer)
 
 install(TARGETS Space 
     RUNTIME DESTINATION bin
@@ -34,3 +33,4 @@ install(TARGETS Space
 )
 
 add_subdirectory(data)
+add_subdirectory(core)

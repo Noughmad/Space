@@ -1,7 +1,8 @@
-set (Space_Core_SRCS
+set (Space_Core_SRCS objectmanager.cpp
     string.cpp
     iobject.cpp
-    iobjectmanager.cpp
+    iobjectfactory.cpp
+    objectmanager.cpp
 )
 
 include_directories(${QT_INCLUDES})
