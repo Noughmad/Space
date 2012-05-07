@@ -1,8 +1,26 @@
+vertex_program FadeIn cg
+{
+    source fade_in.cg
+    entry_point AlphaFadeIn_vp
+    profiles vs_1_1 vs_2_0 vs_2_x vs_3_0 arbvp1
+}
+
+vertex_program FadeOut cg
+{
+    source fade_out.cg
+    entry_point AlphaFadeOut_vp
+    profiles vs_1_1 vs_2_0 vs_2_x vs_3_0 arbvp1
+}
+
 material Earth 
 {
     receive_shadows on
+    lod_strategy Distance
+    lod_values 250.0 500.0
+    
     technique
     {
+        lod_index 0
         pass 
         {
             texture_unit 
@@ -12,6 +30,59 @@ material Earth
                 colour_op replace
                 scale 1.0 1.0
             }
+        }
+    }
+    
+    technique
+    {
+        lod_index 1
+        pass 
+        {
+            scene_blend alpha_blend
+        
+            texture_unit 
+            {
+                texture earth.jpg
+                tex_address_mode wrap
+                scale 1.0 1.0
+            }
+            
+            vertex_program_ref FadeIn
+            {
+                param_named_auto worldViewProj worldviewproj_matrix
+                param_named_auto cameraPosition camera_position_object_space
+                param_named near float 250
+                param_named far float 500
+            }
+        }
+        
+        pass
+        {
+            scene_blend alpha_blend
+            
+            specular 0.0 0.0 0.0 0.0
+            diffuse 0.0 0.0 0.0 0.0
+            ambient 0.3 0.8 1.0 1.0
+            
+            vertex_program_ref FadeOut
+            {
+                param_named_auto worldViewProj worldviewproj_matrix
+                param_named_auto cameraPosition camera_position_object_space
+                param_named near float 250
+                param_named far float 500
+            }
+        }
+    }
+    
+    technique
+    {
+        lod_index 2
+        pass
+        {
+            specular 0.0 0.0 0.0 0.0
+            diffuse 0.0 0.0 0.0 0.0
+            ambient 0.3 0.8 1.0 1.0
+            emissive 0.2 0.6 0.8 0.1
         }
     }
 }

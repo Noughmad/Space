@@ -16,5 +16,7 @@ install(FILES
     mars.jpg
     select.material
     select.png
+    fade_in.cg
+    fade_out.cg
     DESTINATION ${SPACE_DATA_INSTALL_DIR}
 )

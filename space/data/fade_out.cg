@@ -1,0 +1,25 @@
+void AlphaFadeOut_vp(
+    float4 position : POSITION,
+    float2 uv : TEXCOORD0,
+                    
+    out float4 oPosition : POSITION,
+    out float2 oUv : TEXCOORD0,
+    out float4 oColor : COLOR,
+
+    uniform float4x4 worldViewProj,
+    uniform float3 cameraPosition,
+    uniform float near,
+    uniform float far)
+{
+    oPosition = mul(worldViewProj, position);
+    oUv = uv;
+    
+    float dX = cameraPosition.x - oPosition.x;
+    float dY = cameraPosition.y - oPosition.y;
+    float dZ = cameraPosition.z - oPosition.z;
+    
+    oColor.r = 1;
+    oColor.g = 1;
+    oColor.b = 1;
+    oColor.a = (sqrt(dX*dX+dY*dY+dZ*dZ)-near) / far;
+}

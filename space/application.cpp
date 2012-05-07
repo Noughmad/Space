@@ -260,10 +260,8 @@ bool Application::mouseMoved(const OIS::MouseEvent& arg)
     {
         if (arg.state.buttonDown(OIS::MB_Right))
         {
-            Ogre::Real fov = mCamera->getFOVy().valueRadians() * 2.0;
-            double aspect = mCamera->getAspectRatio();
-            
-            mCameraCenterNode->translate(Ogre::Vector3(arg.state.X.rel * fov * aspect, -arg.state.Y.rel * fov, 0), Ogre::Node::TS_LOCAL);
+            Ogre::Real distance = mCamera->getParentNode()->getPosition().z * 0.002;
+            mCameraCenterNode->translate(Ogre::Vector3(arg.state.X.rel * distance, -arg.state.Y.rel * distance, 0), Ogre::Node::TS_LOCAL);
         }
         else if (arg.state.buttonDown(OIS::MB_Middle))
         {
@@ -287,17 +285,10 @@ bool Application::mouseMoved(const OIS::MouseEvent& arg)
     
     if (arg.state.Z.rel)
     {
-        Ogre::Radian fov = mCamera->getFOVy();
-        fov *= (1 - 40.0 / arg.state.Z.rel);
-        if (fov.valueDegrees() > 60)
-        {
-            fov = Ogre::Degree(60);
-        }
-        if (fov.valueDegrees() < 2)
-        {
-            fov = Ogre::Degree(2);
-        }
-        mCamera->setFOVy(fov);
+        Real distance = mCamera->getParentNode()->getPosition().z;
+        distance *= (1 - 0.002 * arg.state.Z.rel);
+        distance = std::min<Real>(std::max<Real>(distance, 100.0f), 2000.0f);
+        mCamera->getParentNode()->setPosition(0, 0, distance);
     }
     
     return true;
