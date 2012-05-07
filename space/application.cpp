@@ -219,7 +219,18 @@ bool Application::mousePressed(const OIS::MouseEvent& arg, OIS::MouseButtonID id
                 {
                     details->addRow();
                     details->setItem(new ListboxTextItem(property), 1, i);
-                    details->setItem(new ListboxTextItem(object->getProperty(property).toString().toStdString()), 2, i);
+                    
+                    String text;
+                    QVariant var = object->getProperty(property);
+                    if (var.canConvert<String>())
+                    {
+                        text = var.value<String>();
+                    }
+                    else
+                    {
+                        text = var.toString().toStdString();
+                    }
+                    details->setItem(new ListboxTextItem(text), 2, i);
                     ++i;
                 }
             }
@@ -347,7 +358,7 @@ bool Application::pause(const EventArgs& e)
 void Application::updateMap()
 {
     mMapCamera = mSceneManager->createCamera("MinimapCamera");
-    mMapCamera->setPosition(0.0, 0.0, 4000.0);
+    mMapCamera->setPosition(0.0, 0.0, 1000.0);
     mMapCamera->lookAt(0.0, 0.0, 0.0);
     
     Ogre::TexturePtr texture = Ogre::TextureManager::getSingletonPtr()->createManual("Minimap",
