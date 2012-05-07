@@ -45,6 +45,8 @@ public:
     IObject* parent();
     void setParent(IObject* parent);
     
+    String identifier() const;
+    
 private:
     String mIdentifier;
     IObject* mParent;

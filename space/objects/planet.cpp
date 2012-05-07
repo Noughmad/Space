@@ -12,7 +12,7 @@ SPACE_DECLARE_FACTORY("/Celestial/Planet", Planet);
 
 Planet::Planet(const String& identifier, IObject* parent): IObject(identifier, parent)
 {
-    setProperty("SubType", identifier.substr(0, identifier.find('/')));
+    
 }
 
 Planet::~Planet()

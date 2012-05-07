@@ -2,9 +2,11 @@
 
 using namespace Space;
 
-IObject::IObject(const String& identifier, IObject* parent) : mIdentifier(identifier), mParent(parent)
+IObject::IObject(const String& identifier, IObject* parent) : mParent(parent)
 {
+    setProperty("SubType", identifier.substr(0, identifier.find('/')));
     setId(identifier.substr(identifier.find_last_of('/')));
+    mIdentifier = identifier;
 }
 
 IObject::~IObject()
@@ -57,3 +59,7 @@ StringList IObject::propertyNames()
     return mProperties.keys();
 }
 
+String IObject::identifier() const
+{
+    return typeId() + '/' + mIdentifier;
+}
