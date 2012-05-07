@@ -1,5 +1,5 @@
 #include "movementmanager.h"
-#include "objects/celestialobject.h"
+#include "core/iobject.h"
 
 using namespace Space;
 
@@ -22,14 +22,14 @@ void MovementManager::processFrame(Ogre::SceneManager* sceneManager, ObjectMap o
     for (; it != end; ++it)
     {
         Ogre::SceneNode* node = it.value();
-        if (CelestialObject* celestial = dynamic_cast<CelestialObject*>(it.key()))
+        Real revolutionSpeed = it.key()->getProperty<Real>("RevolutionSpeed");
+        Real rotationSpeed = it.key()->getProperty<Real>("RotationSpeed");
+
+        node->roll(Ogre::Radian(factor * timeSinceLastFrame * revolutionSpeed));
+        Ogre::SceneNode* subNode = dynamic_cast<Ogre::SceneNode*>(node->getChild(it.key()->id() + "/RotationNode"));
+        if (subNode)
         {
-            node->roll(Ogre::Radian(factor * timeSinceLastFrame * celestial->revolutionSpeed()));
-            Ogre::SceneNode* subNode = dynamic_cast<Ogre::SceneNode*>(node->getChild(celestial->name() + "/RotationNode"));
-            if (subNode)
-            {
-                subNode->roll(Ogre::Radian(factor * timeSinceLastFrame * celestial->rotationSpeed()));
-            }
+            subNode->roll(Ogre::Radian(factor * timeSinceLastFrame * rotationSpeed));
         }
     }
 }

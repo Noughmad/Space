@@ -1,7 +1,6 @@
 #include "application.h"
-#include "object.h"
+#include "core/iobject.h"
 #include "movementmanager.h"
-#include "objects/celestialobject.h"
 #include "space_config.h"
 
 #include <OgreRenderWindow.h>
@@ -78,8 +77,8 @@ void Application::setupGui()
     pause->subscribeEvent(PushButton::EventClicked, Event::Subscriber(&Application::pause, this));   
     
     MultiColumnList* details = dynamic_cast<MultiColumnList*>(windowManager->getWindow(DetailContentsId));
-    details->addColumn("Property", 1, UDim(0.25, 0));
-    details->addColumn("Value", 2, UDim(0.75, 0));
+    details->addColumn("Property", 1, UDim(0.4, 0));
+    details->addColumn("Value", 2, UDim(0.6, 0));
     
     System::getSingleton().setGUISheet(sheet);    
 }
@@ -200,7 +199,7 @@ bool Application::mousePressed(const OIS::MouseEvent& arg, OIS::MouseButtonID id
         
         if (mSelectedObject)
         {
-            Object* object = mObjectNodes.key(mSelectedObject);
+            IObject* object = mObjectNodes.key(mSelectedObject);
             Ogre::SceneNode* root = mSceneManager->getRootSceneNode();
             
             while (!object && (mSelectedObject != root) )
@@ -215,19 +214,13 @@ bool Application::mousePressed(const OIS::MouseEvent& arg, OIS::MouseButtonID id
             {
                 mSelectedObject->showBoundingBox(true);
                 
-                details->addRow();            
-                details->setItem(new ListboxTextItem("Name"), 1, 0);
-                details->setItem(new ListboxTextItem(object->name()), 2, 0);
-                
-                details->addRow();            
-                details->setItem(new ListboxTextItem("Type"), 1, 1);
-                details->setItem(new ListboxTextItem(object->type()), 2, 1);
-
-                if (CelestialObject* celestial = dynamic_cast<CelestialObject*>(object))
+                int i = 0;
+                foreach (const String& property, object->propertyNames())
                 {
-                    details->addRow();            
-                    details->setItem(new ListboxTextItem("Size"), 1, 2);
-                    details->setItem(new ListboxTextItem(QString::number(celestial->size()).toStdString()), 2, 2);
+                    details->addRow();
+                    details->setItem(new ListboxTextItem(property), 1, i);
+                    details->setItem(new ListboxTextItem(object->getProperty(property).toString().toStdString()), 2, i);
+                    ++i;
                 }
             }
         }
@@ -296,7 +289,7 @@ Ogre::SceneManager* Application::sceneManager()
     return mSceneManager;
 }
 
-void Application::addObject(Object* object)
+void Application::addObject(IObject* object)
 {
     /**
      * There are two nodes for every object. 
@@ -317,20 +310,14 @@ void Application::addObject(Object* object)
     {
         parentNode = mSceneManager->getRootSceneNode();
     }
-    Ogre::SceneNode* node = parentNode->createChildSceneNode(object->name() + "/Master");
-    node = node->createChildSceneNode(object->name() + "/Object");
+    Ogre::SceneNode* node = parentNode->createChildSceneNode(object->id() + "/Master");
+    node = node->createChildSceneNode(object->id() + "/Object");
     mObjectNodes.insert(object, node);
     
-    String id = object->type();
-    if (!mObjectTypes.contains(id))
-    {
-        mObjectTypes[id] = ObjectType(id);
-    }
-    
-    object->create(mSceneManager, node, mObjectTypes[object->type()]);
+    object->create(mSceneManager, node);
 }
 
-void Application::removeObject(Object* object)
+void Application::removeObject(IObject* object)
 {
     Ogre::SceneNode* node = mObjectNodes[object];
     mSceneManager->getRootSceneNode()->removeChild(node);

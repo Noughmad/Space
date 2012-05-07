@@ -1,18 +1,25 @@
 #ifndef SPACE_STAR_H
 #define SPACE_STAR_H
 
-#include "celestialobject.h"
-
+#include "core/iobject.h"
+#include "core/iobjectfactory.h"
 
 namespace Space {
 
-class Star : public CelestialObject
+class Star : public IObject
 {
 
 public:
-    Star(const String& name, Object* parent = 0);
+    Star(const String& identifier, IObject* parent = 0);
     virtual ~Star();
+    
+    virtual String typeId() const;
+    
+    virtual void create(Ogre::SceneManager* manager, Ogre::SceneNode* node);
 };
+
+SPACE_DECLARE_FACTORY("Celestial/Star", Star)
+
 
 }
 

@@ -6,7 +6,7 @@
 
 namespace Space {
 
-class Object;
+class IObject;
 
 class SPACE_CORE_EXPORT IObjectFactory
 {
@@ -14,9 +14,15 @@ class SPACE_CORE_EXPORT IObjectFactory
 public:
     virtual ~IObjectFactory();
         
-    virtual Object* createObject(const String& identifier) = 0;
+    virtual IObject* createObject(const String& identifier, IObject* parent = 0) = 0;
 };
 
 }
+
+#define SPACE_DECLARE_FACTORY(condition, name)                                  \
+class name##Factory : public IObjectFactory                                     \
+{ public: name##Factory() {} virtual ~name##Factory() {}                        \
+virtual IObject* createObject(const String& identifier, IObject* parent = 0)    \
+{ return new name(identifier, parent); }  };
 
 #endif // SPACE_IOBJECTFACTORY_H

@@ -2,8 +2,12 @@
 
 #include <OgreException.h>
 
-#include "space/application.h"
-#include "space/objects/celestialobject.h"
+#include "application.h"
+
+#include "objects/star.h"
+#include "objects/planet.h"
+
+#include "core/objectmanager.h"
 
 using namespace Space;
 
@@ -11,27 +15,32 @@ int main(int argc, char *argv[])
 {
     Application app;
     
-    CelestialObject* star = new CelestialObject("Celestial/Star/Yellow", "Sun");
-    star->setPosition(Coordinates(0, 0, 0));
-    star->setSize(10);
-    star->setRevolutionSpeed(0.01);
-    star->setRotationSpeed(4.0);
-    star->setLightIntensity(1.0);
+    ObjectManager& manager = ObjectManager::getSingleton();
+    
+    manager.registerFactory("Celestial/Star", new StarFactory());
+    manager.registerFactory("Celestial/Planet", new PlanetFactory());
+    
+    IObject* star = manager.createObject("Celestial/Star/Yellow/Sun");
+    star->setPosition(Ogre::Vector3(0, 0, 0));
+    star->setProperty("Size", 10.0);
+    star->setProperty("RotationSpeed", 2.0);
     app.addObject(star);
     
-    CelestialObject* planet = new CelestialObject("Celestial/Planet/Earth", "Earth", star);
-    planet->setPosition(Coordinates(400.0, 0.0, 0.0));
-    planet->setSize(2.4);
-    planet->setRotationSpeed(10);
-    planet->setRevolutionSpeed(1);
-    app.addObject(planet);
+    IObject* object = manager.createObject("Celestial/Planet/Earth/Earth");
+    object->setPosition(Ogre::Vector3(70, 0, 0));
+    object->setParent(star);
+    object->setProperty("Size", 2.6);
+    object->setProperty("RotationSpeed", 1.0);
+    object->setProperty("RevolutionSpeed", 0.1);
+    app.addObject(object);
     
-    planet = new CelestialObject("Celestial/Planet/Mars", "Mars", star);
-    planet->setPosition(Coordinates(600.0, 0.0, 0.0));
-    planet->setSize(1.9);
-    planet->setRotationSpeed(13);
-    planet->setRevolutionSpeed(0.6);
-    app.addObject(planet);
+    object->setParent(star);
+    object = manager.createObject("Celestial/Planet/Mars/Mars");
+    object->setPosition(Ogre::Vector3(60, 50, 0));
+    object->setProperty("Size", 1.8);
+    object->setProperty("RotationSpeed", 1.3);
+    object->setProperty("RevolutionSpeed", 0.06);
+    app.addObject(object);
  
     try 
     {

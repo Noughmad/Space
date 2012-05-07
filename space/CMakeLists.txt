@@ -1,10 +1,5 @@
 
 set (space_SRCS
-    objecttype.cpp 
-    object.cpp    
-    objects/celestialobject.cpp 
-    objects/planet.cpp 
-    objects/star.cpp
 
     movementmanager.cpp
     application.cpp
@@ -34,3 +29,4 @@ install(TARGETS Space
 
 add_subdirectory(data)
 add_subdirectory(core)
+add_subdirectory(objects)

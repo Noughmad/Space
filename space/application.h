@@ -8,7 +8,6 @@
 
 #include <QMap>
 #include "space_types.h"
-#include "objecttype.h"
 
 namespace Ogre {
 class SceneManager;
@@ -23,7 +22,7 @@ class EventArgs;
 namespace Space {
 
 class MovementManager;
-class Object;
+class IObject;
 
 class Application : public Ogre::FrameListener, public Ogre::WindowEventListener, public OIS::KeyListener, public OIS::MouseListener
 {
@@ -52,8 +51,8 @@ public:
     
     Ogre::SceneManager* sceneManager();
     
-    void addObject(Object* object);
-    void removeObject(Object* object);
+    void addObject(IObject* object);
+    void removeObject(IObject* object);
     
     bool pause(const CEGUI::EventArgs& e);
     bool quit(const CEGUI::EventArgs& e);
@@ -74,7 +73,6 @@ private:
     MovementManager* mMovementManager;
     
     ObjectMap mObjectNodes;
-    ObjectTypeMap mObjectTypes;
     
     bool mShutDown;
     bool mPause;

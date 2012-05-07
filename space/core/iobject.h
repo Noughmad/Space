@@ -5,11 +5,14 @@
 #include "string.h"
 
 #include <QVariant>
+#include <QMap>
+#include <OgreVector3.h>
 
 namespace Ogre
 {
     class SceneManager;
     class SceneNode;
+class Vector3;
 }
 
 namespace Space {
@@ -18,29 +21,48 @@ class SPACE_CORE_EXPORT IObject
 {
 
 public:
-    IObject(const QVariantMap& properties = QVariantMap(), IObject* parent = 0);
+    IObject(const String& identifier, IObject* parent = 0);
     virtual ~IObject();
     
     virtual String typeId() const = 0;
-    virtual String id() const = 0;
 
     virtual void create(Ogre::SceneManager* manager, Ogre::SceneNode* node) = 0;
     
+    QVariant getProperty(const String& name) const;
     void setProperty(const String& name, const QVariant& value);
-    QVariant getProperty(const String& name);
-    template <class T> T getProperty(const String& name);
+    
+    template <class T> T getProperty(const String& name) const;
+    template <class T> void setProperty(const String& name, const T& value);
+    
+    Ogre::Vector3 position() const;
+    void setPosition(const Ogre::Vector3& position);
+    
+    StringList propertyNames();
+    
+    String id() const;
+    void setId(const String& id);
+    
+    IObject* parent();
+    void setParent(IObject* parent);
     
 private:
-    QVariantMap mProperties;
+    String mIdentifier;
     IObject* mParent;
+    QMap<String, QVariant> mProperties;
 };
 
-template <class T> T IObject::getProperty(const String& name)
+template <class T> T IObject::getProperty(const String& name) const
 {
     return getProperty(name).value<T>();
 }
 
+template <class T> void IObject::setProperty(const String& name, const T& value)
+{
+    return setProperty(name, QVariant::fromValue<T>(value));
+}
 
 }
+
+Q_DECLARE_METATYPE(Ogre::Vector3)
 
 #endif // SPACE_OBJECT_H

@@ -17,13 +17,13 @@ class SceneNode;
 namespace Space
 {
 
-class Object;
+class IObject;
 
 typedef Ogre::Real Real;
 
 typedef Ogre::Vector3 Coordinates;
 
-typedef QMap<Object*, Ogre::SceneNode*> ObjectMap;
+typedef QMap<IObject*, Ogre::SceneNode*> ObjectMap;
 
 }
 
