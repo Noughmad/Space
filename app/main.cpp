@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
     
     object->setParent(star);
     object = manager.createObject("Celestial/Planet/Red/Mars");
-    object->setPosition(Ogre::Vector3(60, 50, 0));
+    object->setPosition(Ogre::Vector3(80, 10, 0));
     object->setProperty("Size", 1.8);
     object->setProperty("RotationSpeed", 1.3);
     object->setProperty("RevolutionSpeed", 0.06);

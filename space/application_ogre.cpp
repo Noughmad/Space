@@ -46,6 +46,7 @@ void Application::setupOgre()
     }
     
     mSceneManager = mRoot->createSceneManager(ST_EXTERIOR_REAL_FAR, "SceneManager");
+    mSceneManager->setShadowTechnique(SHADOWTYPE_STENCIL_ADDITIVE);
     
     mCameraCenterNode = mSceneManager->getRootSceneNode()->createChildSceneNode("CameraCenter");
     mCameraPitchNode = mCameraCenterNode->createChildSceneNode("CameraPitch");
@@ -62,6 +63,7 @@ void Application::setupOgre()
     Light* light = mSceneManager->createLight("CameraLight");
     light->setType(Light::LT_DIRECTIONAL);
     light->setDirection(0, 0, 1);
+    light->setCastShadows(false);
     lightNode->attachObject(light);
     
     mCamera->setNearClipDistance(5);
