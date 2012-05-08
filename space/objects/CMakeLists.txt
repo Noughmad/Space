@@ -5,6 +5,20 @@ set (Space_Objects_SRCS
     ship.cpp
 )
 
+set (LIBS ${QT_QTCORE_LIBRARY} ${OGRE_MAIN_LIBRARY})
+
+if (WITH_TINYXML)
+    set (Space_Objects_SRCS 
+        ${Space_Objects_SRCS}
+        dotsceneobject.cpp
+        dotsceneloader.cpp
+    )
+    set (LIBS
+        ${LIBS}
+        ${TINYXML_LIBRARY}
+    )
+endif ()
+
 include_directories(${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/..)
 add_definitions(-DBUILD_SPACE_CORE_LIBRARY)
 

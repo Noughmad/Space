@@ -1,14 +1,16 @@
-project(space)
+project(Space)
 
 cmake_minimum_required(VERSION 2.6)
 
-set (CMAKE_MODULE_PATH "/usr/lib/OGRE/cmake")
+set (CMAKE_MODULE_PATH "${Space_SOURCE_DIR}/cmake" "/usr/lib/OGRE/cmake")
 
 find_package(OGRE REQUIRED)
 find_package(OIS REQUIRED)
+find_package(TinyXML)
+
+set (WITH_TINYXML ${TinyXML_FOUND})
 
 # TODO: Add a cmake module instead
-
 set (CEGUI_LIBRARIES CEGUIBase CEGUIOgreRenderer)
 set (CEGUI_INCLUDE_DIR "/usr/include/CEGUI")
 set (CEGUI_MEDIA_DIR "/usr/share/CEGUI")

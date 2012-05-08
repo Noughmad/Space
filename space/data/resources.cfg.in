@@ -23,3 +23,6 @@ FileSystem=${CEGUI_MEDIA_DIR}/looknfeel
 [Layouts]
 FileSystem=${CEGUI_MEDIA_DIR}/layouts
 FileSystem=${SPACE_DATA_INSTALL_DIR}/ui
+
+[Objects]
+FileSystem=${SPACE_DATA_INSTALL_DIR}/objects
