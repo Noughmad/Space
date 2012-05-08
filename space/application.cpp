@@ -287,7 +287,7 @@ bool Application::mouseMoved(const OIS::MouseEvent& arg)
     {
         Real distance = mCamera->getParentNode()->getPosition().z;
         distance *= (1 - 0.002 * arg.state.Z.rel);
-        distance = std::min<Real>(std::max<Real>(distance, 100.0f), 2000.0f);
+        distance = std::min<Real>(std::max<Real>(distance, 50.0f), 3000.0f);
         mCamera->getParentNode()->setPosition(0, 0, distance);
     }
     
