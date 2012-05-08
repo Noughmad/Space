@@ -1,3 +1,5 @@
+// Code copied from http://www.ogre3d.org/tikiwiki/New+DotScene+Loader
+
 #include "dotsceneloader.h"
 
 #include "tinyxml.h"
