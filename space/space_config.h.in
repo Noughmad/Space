@@ -1,6 +1,9 @@
 #ifndef SPACE_CONFIG_H
 #define SPACE_CONFIG_H
 
+#cmakedefine WITH_TINYXML
+#cmakedefine SPACE_DATA_INSTALL_DIR
+
 namespace Space
 {
     static const char* DataDir = "${SPACE_DATA_INSTALL_DIR}";

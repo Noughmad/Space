@@ -25,7 +25,8 @@ Ogre::SceneNode* DotSceneObject::create(Ogre::SceneManager* manager, Ogre::Scene
     }
     else
     {
-        sceneFile = Ogre::StringUtil::toLowerCase(getProperty<String>("SubType")) + ".scene";
+        sceneFile = getProperty<String>("SubType") + ".scene";
+        Ogre::StringUtil::toLowerCase(sceneFile);
     }
     
     DotSceneLoader loader;

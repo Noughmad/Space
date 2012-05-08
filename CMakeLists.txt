@@ -6,9 +6,9 @@ set (CMAKE_MODULE_PATH "${Space_SOURCE_DIR}/cmake" "/usr/lib/OGRE/cmake")
 
 find_package(OGRE REQUIRED)
 find_package(OIS REQUIRED)
-find_package(TinyXML)
+find_package(TinyXML REQUIRED)
 
-set (WITH_TINYXML ${TinyXML_FOUND})
+set (WITH_TINYXML ${TINYXML_FOUND})
 
 # TODO: Add a cmake module instead
 set (CEGUI_LIBRARIES CEGUIBase CEGUIOgreRenderer)
