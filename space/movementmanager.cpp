@@ -26,10 +26,14 @@ void MovementManager::processFrame(Ogre::SceneManager* sceneManager, ObjectMap o
         Real rotationSpeed = it.key()->getProperty<Real>("RotationSpeed");
 
         node->roll(Ogre::Radian(factor * timeSinceLastFrame * revolutionSpeed));
-        Ogre::SceneNode* subNode = dynamic_cast<Ogre::SceneNode*>(node->getChild(it.key()->id() + "/RotationNode"));
-        if (subNode)
+        try
         {
+            Ogre::SceneNode* subNode = dynamic_cast<Ogre::SceneNode*>(node->getChild(it.key()->id() + "/RotationNode"));
             subNode->roll(Ogre::Radian(factor * timeSinceLastFrame * rotationSpeed));
         }
+        catch (Ogre::ItemIdentityException& e)
+        {
+            
+        }  
     }
 }

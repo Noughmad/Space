@@ -314,7 +314,7 @@ void Application::addObject(IObject* object)
     Ogre::SceneNode* parentNode;
     if (object->parent() && mObjectNodes.contains(object->parent()))
     {
-        parentNode = mTopNodes[object->parent()]->getParentSceneNode();
+        parentNode = mObjectNodes[object->parent()]->getParentSceneNode();
     }
     else
     {

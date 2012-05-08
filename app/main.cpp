@@ -6,6 +6,7 @@
 
 #include "objects/star.h"
 #include "objects/planet.h"
+#include <objects/ship.h>
 
 #include "core/objectmanager.h"
 
@@ -19,6 +20,7 @@ int main(int argc, char *argv[])
     
     manager.registerFactory("Celestial/Star", new StarFactory());
     manager.registerFactory("Celestial/Planet", new PlanetFactory());
+    manager.registerFactory("Ship", new ShipFactory());
     
     IObject* star = manager.createObject("Celestial/Star/Yellow/Sun");
     star->setPosition(Ogre::Vector3(0, 0, 0));
@@ -26,21 +28,27 @@ int main(int argc, char *argv[])
     star->setProperty("RotationSpeed", 2.0);
     app.addObject(star);
     
-    IObject* object = manager.createObject("Celestial/Planet/Blue/Earth");
-    object->setPosition(Ogre::Vector3(70, 0, 0));
-    object->setParent(star);
-    object->setProperty("Size", 2.6);
-    object->setProperty("RotationSpeed", 1.0);
-    object->setProperty("RevolutionSpeed", 0.1);
-    app.addObject(object);
+    IObject* earth = manager.createObject("Celestial/Planet/Blue/Earth");
+    earth->setParent(star);
+    earth->setPosition(Ogre::Vector3(70, 0, 0));
+    earth->setProperty("Size", 2.6);
+    earth->setProperty("RotationSpeed", 1.0);
+    earth->setProperty("RevolutionSpeed", 0.1);
+    app.addObject(earth);
     
-    object->setParent(star);
-    object = manager.createObject("Celestial/Planet/Red/Mars");
-    object->setPosition(Ogre::Vector3(80, 10, 0));
-    object->setProperty("Size", 1.8);
-    object->setProperty("RotationSpeed", 1.3);
-    object->setProperty("RevolutionSpeed", 0.06);
-    app.addObject(object);
+    IObject* mars = manager.createObject("Celestial/Planet/Red/Mars");
+    mars->setParent(star);
+    mars->setPosition(Ogre::Vector3(80, 10, 0));
+    mars->setProperty("Size", 1.8);
+    mars->setProperty("RotationSpeed", 1.3);
+    mars->setProperty("RevolutionSpeed", 0.06);
+    app.addObject(mars);
+    
+    IObject* ship = manager.createObject("Ship/Probe/Voyager");
+    ship->setParent(earth);
+    ship->setPosition(Ogre::Vector3(4.0, 0.0, 0));
+    ship->setProperty("RevolutionSpeed", 5.0);
+    app.addObject(ship);
  
     try 
     {
