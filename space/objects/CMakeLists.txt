@@ -1,6 +1,8 @@
-set (Space_Objects_SRCS ship.cpp
+set (Space_Objects_SRCS
     star.cpp
     planet.cpp
+    asteroidbelt.cpp 
+    ship.cpp
 )
 
 include_directories(${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/..)
