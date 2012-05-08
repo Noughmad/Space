@@ -46,7 +46,8 @@ void Application::setupOgre()
     }
     
     mSceneManager = mRoot->createSceneManager(ST_EXTERIOR_REAL_FAR, "SceneManager");
-    mSceneManager->setShadowTechnique(SHADOWTYPE_STENCIL_ADDITIVE);
+    mSceneManager->setShadowTechnique(SHADOWTYPE_TEXTURE_MODULATIVE);
+    mSceneManager->setShadowTextureSelfShadow(false);
     
     mCameraCenterNode = mSceneManager->getRootSceneNode()->createChildSceneNode("CameraCenter");
     mCameraPitchNode = mCameraCenterNode->createChildSceneNode("CameraPitch");

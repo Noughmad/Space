@@ -110,8 +110,6 @@ material Planet/Blue
     {
         lod_index 4
     }
-    
-    
 }
 
 material Planet/Red
@@ -213,5 +211,4 @@ material Planet/Red
     {
         lod_index 4
     }
-    
 }
