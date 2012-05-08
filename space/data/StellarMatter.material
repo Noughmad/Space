@@ -1,23 +1,75 @@
 
 // blender material: StellarMatter
-material StellarMatter 
+material Star/Yellow 
 {
     receive_shadows off
+    lod_strategy Distance
+    lod_values 500.0 1000.0
+    
     technique
     {
-        pass
+        lod_index 0
+        pass 
         {
-            ambient 0.800000011920929 0.6624787449836731 0.0 1.0
-            diffuse 0.6400000190734865 0.5299830038843005 0.0 1.0
-            specular 0.5 0.5 0.5 1.0 12.5
-            emissive 0.6 0.4 0.0 0.0
-            
-            texture_unit
+            texture_unit 
             {
                 texture StarSurface.png
                 colour_op replace
-                tex_address_mode wrap
-                scale 1.0 1.0
+            }
+        }
+    }
+    
+    technique
+    {
+        lod_index 1
+        pass 
+        {
+            scene_blend alpha_blend
+        
+            texture_unit 
+            {
+                texture StarSurface.png
+                colour_op replace
+            }
+            
+            vertex_program_ref FadeIn
+            {
+                param_named_auto worldViewProj worldviewproj_matrix
+                param_named_auto cameraPosition camera_position_object_space
+                param_named near float 250
+                param_named far float 500
+            }
+        }
+        
+        pass
+        {
+            scene_blend alpha_blend
+            
+            texture_unit
+            {
+                texture yellow.png
+                colour_op replace
+            }
+            
+            vertex_program_ref FadeOut
+            {
+                param_named_auto worldViewProj worldviewproj_matrix
+                param_named_auto cameraPosition camera_position_object_space
+                param_named near float 250
+                param_named far float 500
+            }
+        }
+    }
+    
+    technique
+    {
+        lod_index 2
+        pass
+        {
+            texture_unit
+            {
+                texture yellow.png
+                colour_op replace
             }
         }
     }

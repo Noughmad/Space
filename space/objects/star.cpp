@@ -41,10 +41,8 @@ SceneNode* Star::create(SceneManager* manager, SceneNode* node)
     subNode->setScale(size,size,size);
     
     Ogre::Entity* entity = manager->createEntity(id(), "Star.mesh");
-    if (!Ogre::MaterialManager::getSingletonPtr()->getByName(getProperty<String>("SubType")).isNull())
-    {
-        entity->setMaterialName(getProperty<String>("SubType"));
-    }
+    String materialName = "Star/" + getProperty<String>("SubType");
+    entity->setMaterialName(materialName);
     subNode->attachObject(entity);
     return subNode;
 }
