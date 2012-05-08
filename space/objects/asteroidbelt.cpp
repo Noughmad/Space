@@ -3,6 +3,7 @@
 #include <OgreSceneNode.h>
 #include <OgreParticleSystem.h>
 #include <OgreSceneManager.h>
+#include <OgreParticleEmitter.h>
 
 using namespace Space;
 
@@ -30,8 +31,7 @@ Ogre::SceneNode* AsteroidBelt::create(Ogre::SceneManager* manager, Ogre::SceneNo
         subNode->setScale(size, size, size);
     }
     Ogre::ParticleSystem* system = manager->createParticleSystem(id() + "System", "Space/" + getProperty<String>("SubType"));
-    system->fastForward(1000.0);
     subNode->attachObject(system);
-    
+    system->fastForward(100.0);
     return subNode;
 }

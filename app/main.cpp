@@ -7,6 +7,7 @@
 #include "objects/star.h"
 #include "objects/planet.h"
 #include <objects/ship.h>
+#include <objects/asteroidbelt.h>
 
 #include "core/objectmanager.h"
 
@@ -21,6 +22,7 @@ int main(int argc, char *argv[])
     manager.registerFactory("Celestial/Star", new StarFactory());
     manager.registerFactory("Celestial/Planet", new PlanetFactory());
     manager.registerFactory("Ship", new ShipFactory());
+    manager.registerFactory("Celestial/Belt", new AsteroidBeltFactory());
     
     IObject* star = manager.createObject("Celestial/Star/Yellow/Sun");
     star->setPosition(Ogre::Vector3(0, 0, 0));
@@ -49,6 +51,12 @@ int main(int argc, char *argv[])
     ship->setPosition(Ogre::Vector3(4.0, 0.0, 0));
     ship->setProperty("RevolutionSpeed", 5.0);
     app.addObject(ship);
+    
+    IObject* belt = manager.createObject("Celestial/Belt/Asteroids/SunAsteroids");
+    belt->setParent(star);
+    belt->setProperty("RotationSpeed", 0.02);
+    belt->setProperty("Size", 10);
+    app.addObject(belt);
  
     try 
     {

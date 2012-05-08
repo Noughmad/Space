@@ -9,18 +9,21 @@ particle_system Space/Star
     local_space     true
  
     // Area emitter
-    emitter Ellipsoid
+    emitter HollowEllipsoid
     {
         angle           30
-        emission_rate   80
-        time_to_live_min 20
-        time_to_live_max 40
+        emission_rate   150
+        time_to_live_min 5
+        time_to_live_max 10
         direction       0 1 0
         velocity       0.0
         colour 0.55 0.45 0.3
-        width           4.0
-        height          4.0
-        depth           4.0
+        width                   4
+        height                  4
+        depth                   4
+        inner_width             0.5
+        inner_height            0.5
+        inner_depth             0.5
     }
  
     // Fader
@@ -31,3 +34,40 @@ particle_system Space/Star
         blue -0.025
     }
  }
+ 
+particle_system Space/Asteroids
+{
+    material Space/Asteroid
+    quota 10000
+    particle_width 0.3
+    particle_height 0.3
+    cull_each false
+    local_space true
+    billboard_type point
+    
+    emitter Ring
+    {
+        emission_rate 10
+        time_to_live_min 30
+        time_to_live_max 300
+        velocity 0.0
+        colour 1.0 1.0 1.0 1.0
+        
+        direction 0 0 1
+        
+        width 30
+        height 30
+        depth 3
+        
+        inner_width 2
+        inner_height 2
+        inner_depth 0.2
+    }
+    
+    affector DirectionRandomiser
+    {
+        randomness 1
+        scope 1
+        keep_velocity true
+    }
+}

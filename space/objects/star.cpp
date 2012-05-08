@@ -35,8 +35,8 @@ SceneNode* Star::create(SceneManager* manager, SceneNode* node)
     Ogre::SceneNode* particlesNode = subNode->createChildSceneNode(id() + "/ParticlesNode");
     particlesNode->scale(0.6, 0.6, 0.6);
     Ogre::ParticleSystem* particleSystem = manager->createParticleSystem(id() + "/Particles", "Space/Star");
-    particleSystem->fastForward(10.0);
     particlesNode->attachObject(particleSystem);
+    particleSystem->fastForward(10.0);
     
     subNode->setScale(size,size,size);
     
