@@ -70,7 +70,7 @@ void Application::setupGui()
     System::getSingleton().setDefaultMouseCursor("TaharezLook", "MouseArrow");
     
     WindowManager* windowManager = WindowManager::getSingletonPtr();
-    Window *sheet = windowManager->loadWindowLayout(Ogre::String(DataDir) + "/space.layout");
+    Window *sheet = windowManager->loadWindowLayout("space.layout");
     
     Window* quit = windowManager->getWindow("Space/Menu/QuitButton");
     quit->subscribeEvent(PushButton::EventClicked, Event::Subscriber(&Application::quit, this));

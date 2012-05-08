@@ -1,5 +1,3 @@
-
-// blender material: StellarMatter
 material Star/Yellow 
 {
     receive_shadows off
@@ -13,7 +11,7 @@ material Star/Yellow
         {
             texture_unit 
             {
-                texture StarSurface.png
+                texture star_surface.png
                 colour_op replace
             }
         }
@@ -28,7 +26,7 @@ material Star/Yellow
         
             texture_unit 
             {
-                texture StarSurface.png
+                texture star_surface.png
                 colour_op replace
             }
             
