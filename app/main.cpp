@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
     star->setProperty("RotationSpeed", 2.0);
     app.addObject(star);
     
-    IObject* object = manager.createObject("Celestial/Planet/Earth/Earth");
+    IObject* object = manager.createObject("Celestial/Planet/Blue/Earth");
     object->setPosition(Ogre::Vector3(70, 0, 0));
     object->setParent(star);
     object->setProperty("Size", 2.6);
@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
     app.addObject(object);
     
     object->setParent(star);
-    object = manager.createObject("Celestial/Planet/Mars/Mars");
+    object = manager.createObject("Celestial/Planet/Red/Mars");
     object->setPosition(Ogre::Vector3(60, 50, 0));
     object->setProperty("Size", 1.8);
     object->setProperty("RotationSpeed", 1.3);

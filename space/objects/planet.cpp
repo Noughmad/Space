@@ -36,10 +36,10 @@ Ogre::SceneNode* Planet::create(Ogre::SceneManager* manager, Ogre::SceneNode* no
     subNode->setScale(size,size,size);
     
     Ogre::Entity* entity = manager->createEntity(id(), "Planet.mesh");
-    String subType = getProperty<String>("SubType");
-    if (!Ogre::MaterialManager::getSingletonPtr()->getByName(subType).isNull())
+    String materialName = "Planet/" + getProperty<String>("SubType");
+    if (!Ogre::MaterialManager::getSingletonPtr()->getByName(materialName).isNull())
     {
-        entity->setMaterialName(subType);
+        entity->setMaterialName(materialName);
     }
     subNode->attachObject(entity);
     return subNode;

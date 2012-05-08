@@ -18,5 +18,7 @@ install(FILES
     select.png
     fade_in.cg
     fade_out.cg
+    blue.png
+    red.png
     DESTINATION ${SPACE_DATA_INSTALL_DIR}
 )
