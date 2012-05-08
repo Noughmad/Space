@@ -41,14 +41,6 @@ material Planet/Blue
             {
                 texture earth.jpg
             }
-            
-            vertex_program_ref FadeIn
-            {
-                param_named_auto worldViewProj worldviewproj_matrix
-                param_named_auto cameraPosition camera_position_object_space
-                param_named near float 250
-                param_named far float 500
-            }
         }
         
         pass
@@ -140,14 +132,6 @@ material Planet/Red
             texture_unit 
             {
                 texture mars.jpg
-            }
-            
-            vertex_program_ref FadeIn
-            {
-                param_named_auto worldViewProj worldviewproj_matrix
-                param_named_auto cameraPosition camera_position_object_space
-                param_named near float 250
-                param_named far float 500
             }
         }
         
