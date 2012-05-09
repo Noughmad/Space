@@ -361,6 +361,7 @@ void Application::updateMap()
     renderTexture->addViewport(mMapCamera);
     renderTexture->getViewport(0)->setBackgroundColour(Ogre::ColourValue::Black);
     renderTexture->getViewport(0)->setOverlaysEnabled(false);
+    renderTexture->getViewport(0)->setSkiesEnabled(false);
     
     CEGUI::Texture& guiTexture = mGuiRenderer->createTexture(texture);
     CEGUI::Imageset& imageset = CEGUI::ImagesetManager::getSingleton().create("MinimapImageset", guiTexture);

@@ -107,11 +107,7 @@ void Application::setupOgre()
     
     mSceneManager->setAmbientLight(ColourValue(0.5f, 0.5f, 0.5f));
   
-    // Create a Light and set its position
-    /*
-    Light* light = mSceneManager->createLight("MainLight");
-    light->setPosition(20.0f, 80.0f, 50.0f);
-    */
+    mSceneManager->setSkyBox(true, "Space/SpaceSkyBox");
     
     mRaySceneQuery = mSceneManager->createRayQuery(Ray());
     

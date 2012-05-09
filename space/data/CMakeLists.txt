@@ -19,6 +19,14 @@ install (FILES
     materials/mars.jpg
     materials/star_surface.png
     materials/asteroid.png
+    materials/stevecube.jpg
+    
+    materials/box_bk.png
+    materials/box_fr.png
+    materials/box_lf.png
+    materials/box_rt.png
+    materials/box_up.png
+    materials/box_dn.png
     
     materials/star.particle
     materials/star.material
