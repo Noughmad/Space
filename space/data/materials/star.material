@@ -65,7 +65,7 @@ material Star/Yellow
     }
 }
 
-material Space/Asteroid
+material Space/AsteroidParticle
 {
     
     lod_strategy PixelCount

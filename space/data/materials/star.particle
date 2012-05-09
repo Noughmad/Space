@@ -37,7 +37,7 @@ particle_system Space/Star
  
 particle_system Space/Asteroids
 {
-    material Space/Asteroid
+    material Space/AsteroidParticle
     quota 10000
     particle_width 0.3
     particle_height 0.3
