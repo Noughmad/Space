@@ -44,10 +44,8 @@ IObject* ObjectManager::createObject(const String& identifier)
     foreach (const FactoryCondition& condition, mFactories)
     {
         int p = condition.prefix.size();
-        std::cout << "Trying factory " << condition.prefix << std::endl;
         if (condition.prefix.compare(identifier.substr(0, p)) == 0)
         {
-            std::cout << "Match" << std::endl;
             if (IObject* ret = condition.factory->createObject(identifier.substr(p+1)))
             {
                 std::cout << "Created object " << identifier.substr(p+1) << " with factory " << condition.prefix << std::endl;
