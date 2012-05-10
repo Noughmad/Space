@@ -1,4 +1,4 @@
-set (Space_Core_SRCS
+set (Space_Core_SRCS luastate.cpp
     iobject.cpp
     iobjectfactory.cpp
     objectmanager.cpp
