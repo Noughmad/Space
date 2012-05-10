@@ -12,6 +12,7 @@
 namespace Ogre {
 class SceneManager;
 class SceneManager;
+class SceneNode;
 }
 
 namespace CEGUI {
@@ -59,6 +60,8 @@ public:
     
     void updateMap();
     void select(Ogre::SceneNode* node);
+    
+    void setPositionAnimated(Ogre::SceneNode* node, const Ogre::Vector3& position);
     
 private:
     Ogre::Root* mRoot;

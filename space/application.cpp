@@ -21,6 +21,9 @@ using namespace CEGUI;
 const char* DetailWindowId = "Space/Detail";
 const char* DetailContentsId = "Space/Detail/Contents";
 
+const Real CameraAnimationDuration = 0.5;
+const char* CameraAnimationId = "Space/CameraAnimation";
+
 MouseButton convertButton(OIS::MouseButtonID buttonID)
 {
     switch (buttonID)
@@ -413,6 +416,12 @@ void Application::select(Ogre::SceneNode* node)
         set->createBillboard(0, 0, 0);
         markerNode->attachObject(set);
     }
+}
+
+void Application::setPositionAnimated(Ogre::SceneNode* node, const Ogre::Vector3& position)
+{
+    // TODO: Implement animations
+    node->setPosition(position);
 }
 
 
