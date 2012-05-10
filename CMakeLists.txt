@@ -8,12 +8,13 @@ find_package(OGRE REQUIRED)
 find_package(OIS REQUIRED)
 find_package(TinyXML REQUIRED)
 
-set (WITH_TINYXML ${TINYXML_FOUND})
+find_package(CEGUI)
+find_package(Lua51)
+find_package(ToLua)
 
-# TODO: Add a cmake module instead
-set (CEGUI_LIBRARIES CEGUIBase CEGUIOgreRenderer)
-set (CEGUI_INCLUDE_DIR "/usr/include/CEGUI")
-set (CEGUI_MEDIA_DIR "/usr/share/CEGUI")
+include(SpaceMacros)
+
+set (WITH_TINYXML ${TINYXML_FOUND})
 
 set (SPACE_DATA_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/share/Space")
 set (SPACE_LIB_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/lib")

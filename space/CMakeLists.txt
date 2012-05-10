@@ -18,7 +18,7 @@ include_directories(
 )
 
 add_library(Space SHARED ${space_SRCS})
-target_link_libraries(Space SpaceCore ${OGRE_LIBRARIES} ${QT_QTCORE_LIBRARY} CEGUIBase CEGUIOgreRenderer)
+target_link_libraries(Space SpaceCore ${OGRE_LIBRARIES} ${QT_QTCORE_LIBRARY} ${CEGUI_BASE_LIBRARY} ${CEGUI_OGRE_RENDERER_LIBRARY})
 
 install(TARGETS Space 
     RUNTIME DESTINATION bin

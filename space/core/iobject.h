@@ -17,20 +17,23 @@ namespace Ogre
 class SceneNode;
 }
 
-namespace Space {
+namespace Space {       // tolua_export
     
-class SPACE_CORE_EXPORT IObject
-{
+class SPACE_CORE_EXPORT IObject {       // tolua_export
 
 public:
+    // tolua_begin
+    
     enum OrientationPart {
         OrientObject,
         OrientWeapons,
         OrientEngines
     };
     
+    
     IObject(const String& identifier, IObject* parent = 0);
     virtual ~IObject();
+    
     
     virtual String typeId() const = 0;
     virtual Ogre::SceneNode* create(Ogre::SceneManager* manager, Ogre::SceneNode* node) = 0;
@@ -38,6 +41,8 @@ public:
     
     QVariant getProperty(const String& name) const;
     void setProperty(const String& name, const QVariant& value);
+    
+    // tolua_end
     
     template <class T> T getProperty(const String& name) const;
     template <class T> void setProperty(const String& name, const T& value);
@@ -47,6 +52,8 @@ public:
     
     StringList propertyNames();
     
+    // tolua_begin
+    
     String id() const;
     void setId(const String& id);
     
@@ -55,6 +62,8 @@ public:
     
     String identifier() const;
     
+    // tolua_end
+    
 protected:
     Ogre::SceneNode* mainNode;
     
@@ -62,7 +71,7 @@ private:
     String mIdentifier;
     IObject* mParent;
     QMap<String, QVariant> mProperties;
-};
+};    // tolua_export
 
 template <class T> T IObject::getProperty(const String& name) const
 {
@@ -74,7 +83,7 @@ template <class T> void IObject::setProperty(const String& name, const T& value)
     return setProperty(name, QVariant::fromValue<T>(value));
 }
 
-}
+}       // tolua_export
 
 Q_DECLARE_METATYPE(Ogre::Vector3)
 

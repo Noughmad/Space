@@ -1,0 +1,6 @@
+
+typedef float Real;
+typedef std::string String;
+
+$cfile "iobject.h"
+$cfile "objectmanager.h"
