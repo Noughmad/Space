@@ -67,6 +67,7 @@ void Application::setupOgre()
     
     mCamera->setNearClipDistance(5);
     mCamera->setFarClipDistance(10000);
+    mCamera->setUseRenderingDistance(true);
     
     // Create one viewport, entire window
     Viewport* vp = mWindow->addViewport(mCamera);

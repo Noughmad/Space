@@ -33,5 +33,7 @@ Ogre::SceneNode* AsteroidBelt::create(Ogre::SceneManager* manager, Ogre::SceneNo
     Ogre::ParticleSystem* system = manager->createParticleSystem(id() + "System", "Space/" + getProperty<String>("SubType"));
     subNode->attachObject(system);
     system->fastForward(100.0);
+    
+    system->setRenderingDistance(1000.0);
     return subNode;
 }
