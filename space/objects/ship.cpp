@@ -25,10 +25,25 @@ Ogre::SceneNode* Ship::create(Ogre::SceneManager* manager, Ogre::SceneNode* node
     Ogre::Entity* entity = manager->createEntity(id(), "Probe.mesh");
     entityNode->attachObject(entity);
     
+    mainNode = node;
     return shipNode;
 }
 
 Space::String Ship::typeId() const
 {
     return "Ship";
+}
+
+void Ship::lookAt(const Ogre::Vector3& position, IObject::OrientationPart part)
+{
+    switch (part)
+    {
+        case OrientObject:
+            mainNode->lookAt(position, Ogre::Node::TS_WORLD);
+            break;
+            
+        case OrientWeapons:
+            Ogre::LogManager::getSingletonPtr()->logMessage("Orienting weapons, not yet supported");
+            break;
+    }
 }

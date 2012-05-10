@@ -3,6 +3,7 @@
 
 #include "core_export.h"
 #include "string.h"
+#include "types.h"
 
 #include <QVariant>
 #include <QMap>
@@ -12,7 +13,8 @@ namespace Ogre
 {
     class SceneManager;
     class SceneNode;
-class Vector3;
+    class Vector3;
+class SceneNode;
 }
 
 namespace Space {
@@ -21,12 +23,18 @@ class SPACE_CORE_EXPORT IObject
 {
 
 public:
+    enum OrientationPart {
+        OrientObject,
+        OrientWeapons,
+        OrientEngines
+    };
+    
     IObject(const String& identifier, IObject* parent = 0);
     virtual ~IObject();
     
     virtual String typeId() const = 0;
-
     virtual Ogre::SceneNode* create(Ogre::SceneManager* manager, Ogre::SceneNode* node) = 0;
+    virtual void lookAt(const Ogre::Vector3& position, OrientationPart part);
     
     QVariant getProperty(const String& name) const;
     void setProperty(const String& name, const QVariant& value);
@@ -46,6 +54,9 @@ public:
     void setParent(IObject* parent);
     
     String identifier() const;
+    
+protected:
+    Ogre::SceneNode* mainNode;
     
 private:
     String mIdentifier;

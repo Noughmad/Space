@@ -1,4 +1,5 @@
 #include "iobject.h"
+#include <OgreSceneNode.h>
 
 using namespace Space;
 
@@ -7,11 +8,20 @@ IObject::IObject(const String& identifier, IObject* parent) : mParent(parent)
     setProperty("SubType", identifier.substr(0, identifier.find('/')));
     setId(identifier.substr(identifier.find_last_of('/')));
     mIdentifier = identifier;
+    mainNode = 0;
 }
 
 IObject::~IObject()
 {
 
+}
+
+void IObject::lookAt(const Ogre::Vector3& position, IObject::OrientationPart part)
+{
+    if (mainNode && part == OrientObject)
+    {
+        mainNode->lookAt(position, Ogre::Node::TS_WORLD);
+    }
 }
 
 IObject* IObject::parent()

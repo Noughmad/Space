@@ -15,6 +15,7 @@ public:
     virtual ~Ship();
     
     virtual Ogre::SceneNode* create(Ogre::SceneManager* manager, Ogre::SceneNode* node);
+    virtual void lookAt(const Ogre::Vector3& position, OrientationPart part);
     virtual Space::String typeId() const;
 };
 
