@@ -25,12 +25,12 @@ String AsteroidBelt::typeId() const
 Ogre::SceneNode* AsteroidBelt::create(Ogre::SceneManager* manager, Ogre::SceneNode* node)
 {
     Ogre::SceneNode* subNode = node->createChildSceneNode(id() + "/RotationNode");
-    Real size = getProperty<Real>("Size");
+    Real size = getRealProperty("Size");
     if (size)
     {
         subNode->setScale(size, size, size);
     }
-    Ogre::ParticleSystem* system = manager->createParticleSystem(id() + "System", "Space/" + getProperty<String>("SubType"));
+    Ogre::ParticleSystem* system = manager->createParticleSystem(id() + "System", "Space/" + getProperty("SubType"));
     subNode->attachObject(system);
     system->fastForward(100.0);
     

@@ -2,7 +2,7 @@
 #define SPACE_MOVEMENTMANAGER_H
 
 #include <OgreSceneManager.h>
-#include "space_types.h"
+#include "core/types.h"
 
 namespace Space {
 
@@ -13,7 +13,7 @@ public:
     MovementManager();
     virtual ~MovementManager();
     
-    virtual void processFrame(Ogre::SceneManager* sceneManager, ObjectMap objects, Real timeSinceLastFrame);
+    virtual void processFrame(Ogre::SceneManager* sceneManager, ObjectNodeMap objects, Real timeSinceLastFrame);
 };
 
 }

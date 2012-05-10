@@ -1,5 +1,6 @@
 #include "iobject.h"
 #include <OgreSceneNode.h>
+#include <OgreStringConverter.h>
 
 using namespace Space;
 
@@ -34,42 +35,64 @@ void IObject::setParent(IObject* parent)
     mParent = parent;
 }
 
-QVariant IObject::getProperty(const String& name) const
+String IObject::getProperty(const String& name) const
 {
-    return mProperties.value(name);
+    return mProperties.at(name);
 }
 
-void IObject::setProperty(const String& name, const QVariant& value)
+void IObject::setProperty(const String& name, const String& value)
 {
-    mProperties.insert(name, value);
+    mProperties.insert(std::make_pair(name, value));
 }
+
+void IObject::setProperty(const String& name, double value)
+{
+    setProperty<Ogre::Real>(name, value);
+}
+
 
 String IObject::id() const
 {
-    return getProperty<String>("Id");
+    return getProperty("Id");
 }
 
 void IObject::setId(const String& id)
 {
-    setProperty("Id", QVariant::fromValue<String>(id));
+    setProperty("Id", id);
 }
 
 Ogre::Vector3 IObject::position() const
 {
-    return getProperty<Ogre::Vector3>("Position");
+    return getVectorProperty("Position");
 }
 
 void IObject::setPosition(const Ogre::Vector3& position)
 {
-    setProperty("Position", QVariant::fromValue<Ogre::Vector3>(position));
+    setProperty("Position", position);
 }
 
-StringList IObject::propertyNames()
+StringSet IObject::propertyNames()
 {
-    return mProperties.keys();
+    StringSet set;
+    for (Ogre::NameValuePairList::const_iterator it = mProperties.cbegin(); it != mProperties.cend(); ++it)
+    {
+        set.insert(it->first);
+    }
+    return set;
 }
 
 String IObject::identifier() const
 {
     return typeId() + '/' + mIdentifier;
 }
+
+Real IObject::getRealProperty(const String& name) const
+{
+    return Ogre::StringConverter::parseReal(getProperty(name));
+}
+
+Ogre::Vector3 IObject::getVectorProperty(const String& name) const
+{
+    return Ogre::StringConverter::parseVector3(getProperty(name));
+}
+

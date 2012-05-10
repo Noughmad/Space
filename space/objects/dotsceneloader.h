@@ -5,7 +5,6 @@
 #include <OgreVector3.h>
 #include <OgreQuaternion.h>
 
-#include "core/string.h"
 #include "core/types.h"
 
 #include <vector>

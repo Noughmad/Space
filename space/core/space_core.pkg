@@ -4,3 +4,6 @@ typedef std::string String;
 
 $cfile "iobject.h"
 $cfile "objectmanager.h"
+$cfile "iobjectfactory.h"
+
+$using namespace Space;

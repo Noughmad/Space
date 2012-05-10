@@ -6,8 +6,7 @@
 #include <OISKeyboard.h>
 #include <OISMouse.h>
 
-#include <QMap>
-#include "space_types.h"
+#include "core/types.h"
 
 namespace Ogre {
 class SceneManager;
@@ -76,8 +75,9 @@ private:
 
     MovementManager* mMovementManager;
     
-    ObjectMap mObjectNodes;
-    ObjectMap mTopNodes;
+    ObjectNodeMap mObjectNodes;
+    NodeObjectMap mNodeObjects;
+    ObjectNodeMap mTopNodes;
     
     bool mShutDown;
     bool mPause;

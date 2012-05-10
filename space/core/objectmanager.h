@@ -1,10 +1,7 @@
 #ifndef OBJECTMANAGER_H
 #define OBJECTMANAGER_H
 
-#include "string.h"
-
-#include <QList>
-#include <QPair>
+#include "types.h"
 
 namespace Space {       // tolua_export
 
@@ -33,14 +30,14 @@ public:
     // tolua_begin
     static ObjectManager& getSingleton();
     
-    void registerFactory(const String& prefix, IObjectFactory* factory);
+    void registerFactory(const String& prefix, Space::IObjectFactory* factory);
     void removeFactory(const String& prefix);
     
     IObject* createObject(const String& identifier);
     // tolua_end
     
 private:
-    QList<FactoryCondition> mFactories;
+    List<FactoryCondition>::type mFactories;
 };      //tolua_export
 
 }       // tolua_export

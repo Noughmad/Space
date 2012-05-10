@@ -1,5 +1,4 @@
-set (Space_Core_SRCS objectmanager.cpp
-    string.cpp
+set (Space_Core_SRCS
     iobject.cpp
     iobjectfactory.cpp
     objectmanager.cpp
@@ -7,13 +6,17 @@ set (Space_Core_SRCS objectmanager.cpp
 )
 
 set_source_files_properties(lua_space_core.cpp PROPERTIES GENERATED 1)
-generate_tolua_bindings(space_core space_core.pkg)
+set (SCRIPTED_FILES
+    iobject.h
+    objectmanager.h
+)
+generate_tolua_bindings(space_core space_core.pkg ${SCRIPTED_FILES})
 
-include_directories(${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
 add_definitions(-DBUILD_SPACE_CORE_LIBRARY)
 
 add_library(SpaceCore SHARED ${Space_Core_SRCS})
-target_link_libraries(SpaceCore ${QT_QTCORE_LIBRARY} ${OGRE_LIBRARIES})
+target_link_libraries(SpaceCore ${OGRE_LIBRARIES} ${LUA_LIBRARIES} tolua++)
 
 
 install(TARGETS SpaceCore

@@ -204,13 +204,13 @@ bool Application::mousePressed(const OIS::MouseEvent& arg, OIS::MouseButtonID id
         
         if (selected)
         {
-            IObject* object = mObjectNodes.key(selected);
+            IObject* object = mNodeObjects.at(selected);
             Ogre::SceneNode* root = mSceneManager->getRootSceneNode();
             
             while (!object && (selected != root) )
             {
                 selected = selected->getParentSceneNode();
-                object = mObjectNodes.key(selected);
+                object = mNodeObjects.at(selected);
             }
             
             if (object)
@@ -222,18 +222,7 @@ bool Application::mousePressed(const OIS::MouseEvent& arg, OIS::MouseButtonID id
                 {
                     details->addRow();
                     details->setItem(new ListboxTextItem(property), 1, i);
-                    
-                    String text;
-                    QVariant var = object->getProperty(property);
-                    if (var.canConvert<String>())
-                    {
-                        text = var.value<String>();
-                    }
-                    else
-                    {
-                        text = var.toString().toStdString();
-                    }
-                    details->setItem(new ListboxTextItem(text), 2, i);
+                    details->setItem(new ListboxTextItem(object->getProperty(property)), 2, i);
                     ++i;
                 }
             }
@@ -315,7 +304,7 @@ void Application::addObject(IObject* object)
      */
     
     Ogre::SceneNode* parentNode;
-    if (object->parent() && mObjectNodes.contains(object->parent()))
+    if (object->parent() && mObjectNodes.count(object->parent()))
     {
         parentNode = mObjectNodes[object->parent()]->getParentSceneNode();
     }
@@ -325,8 +314,10 @@ void Application::addObject(IObject* object)
     }
     Ogre::SceneNode* node = parentNode->createChildSceneNode(object->id() + "/Master");
     node = node->createChildSceneNode(object->id() + "/Object");
-    mTopNodes.insert(object, node);
-    mObjectNodes.insert(object, object->create(mSceneManager, node));
+    mTopNodes.insert(std::make_pair(object, node));
+    Ogre::SceneNode* objectNode = object->create(mSceneManager, node);
+    mObjectNodes.insert(std::make_pair(object, node));
+    mNodeObjects.insert(std::make_pair(node, object));
 }
 
 void Application::removeObject(IObject* object)

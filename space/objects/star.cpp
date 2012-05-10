@@ -26,7 +26,7 @@ String Star::typeId() const
 SceneNode* Star::create(SceneManager* manager, SceneNode* node)
 {
     Ogre::SceneNode* subNode = node->createChildSceneNode(id() + "/RotationNode", position());
-    Real size = getProperty<Real>("Size");
+    Real size = getRealProperty("Size");
     
     Ogre::Light* light = manager->createLight(id() + "/Light");
     light->setType(Ogre::Light::LT_POINT);
@@ -41,7 +41,7 @@ SceneNode* Star::create(SceneManager* manager, SceneNode* node)
     subNode->setScale(size,size,size);
     
     Ogre::Entity* entity = manager->createEntity(id(), "Star.mesh");
-    entity->setMaterialName("Star/" + getProperty<String>("SubType"));
+    entity->setMaterialName("Star/" + getProperty("SubType"));
     subNode->attachObject(entity);
     return subNode;
 }

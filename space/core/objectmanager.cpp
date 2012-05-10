@@ -29,13 +29,13 @@ ObjectManager& ObjectManager::getSingleton()
 void ObjectManager::registerFactory(const String& prefix, IObjectFactory* factory)
 {
     FactoryCondition condition = {prefix, factory};
-    mFactories << condition;
+    mFactories.push_back(condition);
 }
 
 void ObjectManager::removeFactory(const String& prefix)
 {
     FactoryCondition condition = {prefix, 0};
-    mFactories.removeAll(condition);
+    mFactories.remove(condition);
 }
 
 IObject* ObjectManager::createObject(const String& identifier)

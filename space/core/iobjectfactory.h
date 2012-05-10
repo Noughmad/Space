@@ -2,22 +2,24 @@
 #define SPACE_IOBJECTFACTORY_H
 
 #include "core_export.h"
-#include "string.h"
+#include "types.h"
 
-namespace Space {
+namespace Space { // tolua_export
 
 class IObject;
 
-class SPACE_CORE_EXPORT IObjectFactory
-{
+class IObjectFactory {  // tolua_export
 
 public:
     virtual ~IObjectFactory();
         
+    // tolua_begin
     virtual IObject* createObject(const String& identifier, IObject* parent = 0) = 0;
-};
+};      
 
 }
+
+// tolua_end
 
 #define SPACE_DECLARE_FACTORY(condition, name)                                  \
 class name##Factory : public IObjectFactory                                     \

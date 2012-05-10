@@ -14,6 +14,8 @@ find_package(ToLua)
 
 include(SpaceMacros)
 
+set (CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -std=c++11)
+
 set (WITH_TINYXML ${TINYXML_FOUND})
 
 set (SPACE_DATA_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/share/Space")
@@ -21,8 +23,6 @@ set (SPACE_LIB_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/lib")
 set(CMAKE_INSTALL_RPATH "${SPACE_LIB_INSTALL_DIR}")
 
 set (OGRE_PLUGIN_DIR ${OGRE_PLUGIN_DIR_TMP})
-
-find_package(Qt COMPONENTS QtCore REQUIRED)
 
 add_subdirectory(space)
 add_subdirectory(app)

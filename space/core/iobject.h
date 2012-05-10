@@ -1,25 +1,24 @@
-#ifndef SPACE_OBJECT_H
-#define SPACE_OBJECT_H
+#ifndef SPACE_IOBJECT_H
+#define SPACE_IOBJECT_H
 
 #include "core_export.h"
-#include "string.h"
 #include "types.h"
 
-#include <QVariant>
-#include <QMap>
 #include <OgreVector3.h>
+#include <OgreCommon.h>
+#include <OgreStringConverter.h>
 
 namespace Ogre
 {
     class SceneManager;
     class SceneNode;
     class Vector3;
-class SceneNode;
+    class SceneNode;
 }
 
 namespace Space {       // tolua_export
     
-class SPACE_CORE_EXPORT IObject {       // tolua_export
+class IObject {       // tolua_export
 
 public:
     // tolua_begin
@@ -29,30 +28,29 @@ public:
         OrientWeapons,
         OrientEngines
     };
-    
+    // tolua_end
     
     IObject(const String& identifier, IObject* parent = 0);
     virtual ~IObject();
     
+    //tolua_begin
     
     virtual String typeId() const = 0;
     virtual Ogre::SceneNode* create(Ogre::SceneManager* manager, Ogre::SceneNode* node) = 0;
     virtual void lookAt(const Ogre::Vector3& position, OrientationPart part);
     
-    QVariant getProperty(const String& name) const;
-    void setProperty(const String& name, const QVariant& value);
+    String getProperty(const String& name) const;
+    Real getRealProperty(const String& name) const;
+    Ogre::Vector3 getVectorProperty(const String& name) const;
     
-    // tolua_end
-    
-    template <class T> T getProperty(const String& name) const;
-    template <class T> void setProperty(const String& name, const T& value);
+    void setProperty(const String& name, const String& value);
+    void setProperty(const String& name, double value);
     
     Ogre::Vector3 position() const;
     void setPosition(const Ogre::Vector3& position);
     
-    StringList propertyNames();
+    StringSet propertyNames();
     
-    // tolua_begin
     
     String id() const;
     void setId(const String& id);
@@ -64,27 +62,23 @@ public:
     
     // tolua_end
     
+    template <class T> void setProperty(const String& name, const T& value);
+    
 protected:
     Ogre::SceneNode* mainNode;
     
 private:
     String mIdentifier;
     IObject* mParent;
-    QMap<String, QVariant> mProperties;
+    StringMap map;
+    Ogre::NameValuePairList mProperties;
 };    // tolua_export
-
-template <class T> T IObject::getProperty(const String& name) const
-{
-    return getProperty(name).value<T>();
-}
 
 template <class T> void IObject::setProperty(const String& name, const T& value)
 {
-    return setProperty(name, QVariant::fromValue<T>(value));
+    setProperty(name, Ogre::StringConverter::toString(value));
 }
 
 }       // tolua_export
 
-Q_DECLARE_METATYPE(Ogre::Vector3)
-
-#endif // SPACE_OBJECT_H
+#endif // SPACE_IOBJECT_H
