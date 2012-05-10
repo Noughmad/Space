@@ -3,7 +3,9 @@
 #include "tolua++.h"
 #include "lua_space_core.h"
 
-#include "lua.hpp"
+extern "C" {
+#include "lualib.h"
+}
 
 using namespace Space;
 
