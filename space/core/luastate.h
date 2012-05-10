@@ -19,7 +19,7 @@ public:
     operator lua_State*();
     
 private:
-    lua_State* mState;
+    lua_State* L;
 };
 
 }

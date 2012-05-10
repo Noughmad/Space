@@ -10,11 +10,16 @@
 #include <objects/asteroidbelt.h>
 
 #include "core/objectmanager.h"
+#include <core/luastate.h>
 
 using namespace Space;
 
 int main(int argc, char *argv[])
 {
+    LuaState state;
+    std::cout << state.loadFile("galaxy.lua") << std::endl;
+    
+    /*
     Application app;
     
     ObjectManager& manager = ObjectManager::getSingleton();
@@ -65,6 +70,8 @@ int main(int argc, char *argv[])
 
     std::cerr << "An exception has occured: " << e.getFullDescription().c_str() << std::endl;
     }
+    
+    */
     
     return 0;
 }

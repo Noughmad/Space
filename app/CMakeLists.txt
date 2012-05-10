@@ -14,3 +14,5 @@ install(TARGETS galactomania
     ARCHIVE DESTINATION bin
     COMPONENT SPACE
 )
+
+install(FILES galaxy.lua DESTINATION bin)

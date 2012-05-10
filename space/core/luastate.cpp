@@ -3,25 +3,41 @@
 #include "tolua++.h"
 #include "lua_space_core.h"
 
+#include "lua.hpp"
+
 using namespace Space;
 
-LuaState::LuaState() : mState()
+LuaState::LuaState() : L()
 {
-    mState = lua_open();
-    tolua_space_core_open(mState);
+    L = lua_open();
+    tolua_space_core_open(L);
+    
+    // Load the basic libraries that should be available to scripts
+    lua_pushcfunction(L,luaopen_base);
+    lua_call(L,0,0);
+    lua_pushcfunction(L,luaopen_math);
+    lua_call(L,0,0);
+    lua_pushcfunction(L,luaopen_string);
+    lua_call(L,0,0);
+    lua_pushcfunction(L,luaopen_table);
+    lua_call(L,0,0);
 }
 
 LuaState::~LuaState()
 {
-    lua_close(mState);
+    lua_close(L);
 }
 
 LuaState::operator lua_State*()
 {
-    return mState;
+    return L;
 }
 
 bool LuaState::loadFile(const String& name)
 {
-    return !luaL_loadfile(mState, name.c_str()) && !lua_pcall(mState, 0, LUA_MULTRET, 0);
+    luaL_dofile(L, name.c_str());
+    lua_getglobal(L, "test");
+    lua_pushstring(L, "Space Test");
+    lua_call(L, 1, 0);
+    return true;
 }
