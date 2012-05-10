@@ -37,7 +37,12 @@ void IObject::setParent(IObject* parent)
 
 String IObject::getProperty(const String& name) const
 {
-    return mProperties.at(name);
+    auto it = mProperties.find(name);
+    if (it != mProperties.end())
+    {
+        return it->second;
+    }
+    return String();
 }
 
 void IObject::setProperty(const String& name, const String& value)
@@ -47,7 +52,7 @@ void IObject::setProperty(const String& name, const String& value)
 
 void IObject::setProperty(const String& name, double value)
 {
-    setProperty<Ogre::Real>(name, value);
+    setProperty(name, Ogre::StringConverter::toString(Ogre::Real(value)));
 }
 
 
@@ -94,5 +99,10 @@ Real IObject::getRealProperty(const String& name) const
 Ogre::Vector3 IObject::getVectorProperty(const String& name) const
 {
     return Ogre::StringConverter::parseVector3(getProperty(name));
+}
+
+void IObject::setPosition(Real x, Real y, Real z)
+{
+    setPosition(Ogre::Vector3(x,y,z));
 }
 

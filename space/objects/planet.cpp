@@ -27,7 +27,8 @@ String Planet::typeId() const
 
 Ogre::SceneNode* Planet::create(Ogre::SceneManager* manager, Ogre::SceneNode* node)
 {
-    Ogre::SceneNode* subNode = node->createChildSceneNode(id() + "/RotationNode", position());
+    Ogre::SceneNode* subNode = node->createChildSceneNode(id() + "/RotationNode");
+    
     Real size = getRealProperty("Size");
     
     subNode = subNode->createChildSceneNode(id() + "/BaseNode");

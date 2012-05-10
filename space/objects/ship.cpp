@@ -16,7 +16,7 @@ Ship::~Ship()
 
 Ogre::SceneNode* Ship::create(Ogre::SceneManager* manager, Ogre::SceneNode* node)
 {
-    Ogre::SceneNode* shipNode = node->createChildSceneNode(id() + "/ShipNode", position());
+    Ogre::SceneNode* shipNode = node->createChildSceneNode(id() + "/ShipNode");
     shipNode->roll(Ogre::Degree(-90));
     shipNode->setScale(0.5, 0.5, 0.5);
     

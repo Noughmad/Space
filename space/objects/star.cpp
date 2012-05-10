@@ -25,7 +25,7 @@ String Star::typeId() const
 
 SceneNode* Star::create(SceneManager* manager, SceneNode* node)
 {
-    Ogre::SceneNode* subNode = node->createChildSceneNode(id() + "/RotationNode", position());
+    Ogre::SceneNode* subNode = node->createChildSceneNode(id() + "/RotationNode");
     Real size = getRealProperty("Size");
     
     Ogre::Light* light = manager->createLight(id() + "/Light");

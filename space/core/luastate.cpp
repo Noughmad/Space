@@ -1,4 +1,5 @@
 #include "luastate.h"
+#include "iobject.h"
 
 #include "tolua++.h"
 #include "lua_space_core.h"
@@ -38,8 +39,40 @@ LuaState::operator lua_State*()
 bool LuaState::loadFile(const String& name)
 {
     luaL_dofile(L, name.c_str());
-    lua_getglobal(L, "test");
-    lua_pushstring(L, "Space Test");
-    lua_call(L, 1, 0);
     return true;
 }
+
+ObjectList LuaState::loadObjects(const String& file, const String& function)
+{
+    loadFile(file);
+    int level = lua_gettop(L);
+
+    // Push the function onto the stack
+    lua_getglobal(L, function.c_str());
+    
+    ObjectList set;
+
+    // Execute the function
+    if (lua_pcall(L, 0, LUA_MULTRET, 0) != 0)
+    {
+        // Something went wrong with the function call
+        return set;
+    }
+    
+    int n = lua_gettop(L) - level;
+    for (int i = level+1; i <= n; ++i)
+    {
+        if (lua_isuserdata(L, i))
+        {
+            IObject* object = *(IObject**)lua_touserdata(L, i);
+            if (object)
+            {
+                set.push_back(object);
+            }
+        }
+    }
+    
+    std::cout << "Loaded " << set.size() << " objects from " << file << std::endl;
+    return set;
+}
+

@@ -38,6 +38,8 @@ class IObject;
     typedef List<String>::type StringList;
     typedef Set<String>::type StringSet;
     typedef Map<String, String>::type StringMap;
+    typedef Set<IObject*>::type ObjectSet;
+    typedef List<IObject*>::type ObjectList;
     
     typedef Map<IObject*, Ogre::SceneNode*>::type ObjectNodeMap;
     typedef Map<Ogre::SceneNode*, IObject*>::type NodeObjectMap;

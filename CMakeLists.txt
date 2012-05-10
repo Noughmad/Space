@@ -8,9 +8,9 @@ find_package(OGRE REQUIRED)
 find_package(OIS REQUIRED)
 find_package(TinyXML REQUIRED)
 
-find_package(CEGUI)
-find_package(Lua51)
-find_package(ToLua)
+find_package(CEGUI REQUIRED)
+find_package(Lua51 REQUIRED)
+find_package(ToLua REQUIRED)
 
 include(SpaceMacros)
 

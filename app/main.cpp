@@ -17,51 +17,29 @@ using namespace Space;
 int main(int argc, char *argv[])
 {
     LuaState state;
-    std::cout << state.loadFile("galaxy.lua") << std::endl;
     
-    /*
-    Application app;
     
     ObjectManager& manager = ObjectManager::getSingleton();
-    
     manager.registerFactory("Celestial/Star", new StarFactory());
     manager.registerFactory("Celestial/Planet", new PlanetFactory());
-    manager.registerFactory("Ship", new ShipFactory());
     manager.registerFactory("Celestial/Belt", new AsteroidBeltFactory());
+    manager.registerFactory("Ship", new ShipFactory());
     
-    IObject* star = manager.createObject("Celestial/Star/Yellow/Sun");
-    star->setPosition(Ogre::Vector3(0, 0, 0));
-    star->setProperty("Size", 10.0);
-    star->setProperty("RotationSpeed", 2.0);
-    app.addObject(star);
     
-    IObject* earth = manager.createObject("Celestial/Planet/Blue/Earth");
-    earth->setParent(star);
-    earth->setPosition(Ogre::Vector3(70, 0, 0));
-    earth->setProperty("Size", 2.6);
-    earth->setProperty("RotationSpeed", 1.0);
-    earth->setProperty("RevolutionSpeed", 0.1);
-    app.addObject(earth);
+    ObjectList objects = state.loadObjects("galaxy.lua");
     
-    IObject* mars = manager.createObject("Celestial/Planet/Red/Mars");
-    mars->setParent(star);
-    mars->setPosition(Ogre::Vector3(80, 10, 0));
-    mars->setProperty("Size", 1.8);
-    mars->setProperty("RotationSpeed", 1.3);
-    mars->setProperty("RevolutionSpeed", 0.06);
-    app.addObject(mars);
+    if (objects.size() == 0)
+    {
+        return 0;
+    }
     
-    IObject* ship = manager.createObject("Ship/Probe/Voyager");
-    ship->setParent(earth);
-    ship->setPosition(Ogre::Vector3(4.0, 0.0, 0));
-    ship->setProperty("RevolutionSpeed", 5.0);
-    app.addObject(ship);
-    
-    IObject* belt = manager.createObject("Celestial/Belt/Asteroids/SunAsteroids");
-    belt->setParent(star);
-    belt->setProperty("RotationSpeed", 0.02);
-    belt->setProperty("Size", 10);
-    app.addObject(belt);
+    Application app;
+
+    for (auto it = objects.cbegin(); it != objects.cend(); ++it)
+    {
+        std::cout << "Adding object " << (*it)->identifier() << std::endl;
+        app.addObject(*it);
+    }
  
     try 
     {
@@ -70,8 +48,6 @@ int main(int argc, char *argv[])
 
     std::cerr << "An exception has occured: " << e.getFullDescription().c_str() << std::endl;
     }
-    
-    */
-    
+        
     return 0;
 }

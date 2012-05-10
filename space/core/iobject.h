@@ -48,6 +48,7 @@ public:
     
     Ogre::Vector3 position() const;
     void setPosition(const Ogre::Vector3& position);
+    void setPosition(Real x, Real y, Real z);
     
     StringSet propertyNames();
     
