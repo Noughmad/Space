@@ -16,9 +16,23 @@ namespace Ogre
     class SceneNode;
 }
 
-namespace Space {       // tolua_export
+// tolua_begin
+namespace Space 
+{
+    // tolua_end
     
-class IObject {       // tolua_export
+    const String OP_Id = "Id";
+    const String OP_SubType = "SubType";
+    const String OP_Position = "Position";
+    
+    const String OP_Size = "Size";
+    const String OP_RotationSpeed = "RotationSpeed";
+    const String OP_RevolutionSpeed = "RevolutionSpeed";
+    
+    // tolua_begin
+class IObject
+{
+// tolua_end
 
 public:
     // tolua_begin
@@ -28,6 +42,7 @@ public:
         OrientWeapons,
         OrientEngines
     };
+    
     // tolua_end
     
     IObject(const String& identifier, IObject* parent = 0);
@@ -39,12 +54,12 @@ public:
     virtual Ogre::SceneNode* create(Ogre::SceneManager* manager, Ogre::SceneNode* node) = 0;
     virtual void lookAt(const Ogre::Vector3& position, OrientationPart part);
     
-    String getProperty(const String& name) const;
-    Real getRealProperty(const String& name) const;
-    Ogre::Vector3 getVectorProperty(const String& name) const;
+    String get(const String& name) const;
+    Real getReal(const String& name) const;
+    Ogre::Vector3 getVector(const String& name) const;
     
-    void setProperty(const String& name, const String& value);
-    void setProperty(const String& name, double value);
+    void set(const String& name, const String& value);
+    void set(const String& name, double value);
     
     Ogre::Vector3 position() const;
     void setPosition(const Ogre::Vector3& position);
@@ -63,7 +78,7 @@ public:
     
     // tolua_end
     
-    template <class T> void setProperty(const String& name, const T& value);
+    template <class T> void set(const String& name, const T& value);
     
 protected:
     Ogre::SceneNode* mainNode;
@@ -75,9 +90,9 @@ private:
     Ogre::NameValuePairList mProperties;
 };    // tolua_export
 
-template <class T> void IObject::setProperty(const String& name, const T& value)
+template <class T> void IObject::set(const String& name, const T& value)
 {
-    setProperty(name, Ogre::StringConverter::toString(value));
+    set(name, Ogre::StringConverter::toString(value));
 }
 
 }       // tolua_export

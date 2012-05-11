@@ -59,8 +59,9 @@ ObjectList LuaState::loadObjects(const String& file, const String& function)
         return set;
     }
     
+    int m = lua_gettop(L);
     int n = lua_gettop(L) - level;
-    for (int i = level+1; i <= n; ++i)
+    for (int i = level+1; i <= m; ++i)
     {
         if (lua_isuserdata(L, i))
         {
@@ -71,6 +72,8 @@ ObjectList LuaState::loadObjects(const String& file, const String& function)
             }
         }
     }
+    
+    lua_pop(L, n);
     
     std::cout << "Loaded " << set.size() << " objects from " << file << std::endl;
     return set;

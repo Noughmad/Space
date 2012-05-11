@@ -21,11 +21,11 @@ Ogre::SceneNode* DotSceneObject::create(Ogre::SceneManager* manager, Ogre::Scene
     String sceneFile;
     if (propertyNames().count("SceneFileName"))
     {
-        sceneFile = getProperty("SceneFileName");
+        sceneFile = get("SceneFileName");
     }
     else
     {
-        sceneFile = getProperty("SubType") + ".scene";
+        sceneFile = get(OP_SubType) + ".scene";
         Ogre::StringUtil::toLowerCase(sceneFile);
     }
     

@@ -225,7 +225,7 @@ bool Application::mousePressed(const OIS::MouseEvent& arg, OIS::MouseButtonID id
                 {
                     details->addRow();
                     details->setItem(new ListboxTextItem(property), 1, i);
-                    details->setItem(new ListboxTextItem(object->getProperty(property)), 2, i);
+                    details->setItem(new ListboxTextItem(object->get(property)), 2, i);
                     ++i;
                 }
             }

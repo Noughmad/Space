@@ -22,14 +22,14 @@ Planet::~Planet()
 
 String Planet::typeId() const
 {
-    return "Celestial/Planet/" + getProperty("SubType");
+    return "Celestial/Planet/";
 }
 
 Ogre::SceneNode* Planet::create(Ogre::SceneManager* manager, Ogre::SceneNode* node)
 {
     Ogre::SceneNode* subNode = node->createChildSceneNode(id() + "/RotationNode");
     
-    Real size = getRealProperty("Size");
+    Real size = getReal(OP_Size);
     
     subNode = subNode->createChildSceneNode(id() + "/BaseNode");
     subNode->pitch(Ogre::Degree(90));
@@ -37,7 +37,7 @@ Ogre::SceneNode* Planet::create(Ogre::SceneManager* manager, Ogre::SceneNode* no
     subNode->setScale(size,size,size);
     
     Ogre::Entity* entity = manager->createEntity(id(), "Planet.mesh");
-    entity->setMaterialName("Planet/" + getProperty("SubType"));
+    entity->setMaterialName("Planet/" + get(OP_SubType));
     subNode->attachObject(entity);
     return subNode;
 }
