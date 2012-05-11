@@ -26,19 +26,36 @@ namespace Ogre {
 class SceneNode;
 }
 
+/**
+ * @brief The main namespace for the entire Space library
+ **/
 namespace Space
 {
 
 class IObject;
+    /**
+    * A real number type
+    **/
     typedef Ogre::Real Real;
-    typedef Ogre::String String;
     
+    /**
+    * The default string type used throughout Space
+    **/
+    typedef Ogre::String String;
+        
+    /**
+    * List type, maps to std::list
+    **/
     template <typename T> struct List
     { 
         typedef typename Ogre::list<T>::type type;
         typedef typename Ogre::list<T>::iterator iterator;
         typedef typename Ogre::list<T>::const_iterator const_iterator;
     };
+    
+    /**
+     * Set type, maps to std::set
+     **/
     template <typename T> struct Set
     { 
         typedef typename Ogre::set<T>::type type;
@@ -46,16 +63,26 @@ class IObject;
         typedef typename Ogre::set<T>::const_iterator const_iterator;
     };
     
-    template <typename K, typename V, typename P = std::less<K> >
-    struct Map 
+    /**
+     * Map type, maps to std::map
+     **/
+    template <typename K, typename V, typename P = std::less<K> > struct Map 
     { 
         typedef typename Ogre::map<K, V, P>::type type;
         typedef typename Ogre::map<K, V, P>::iterator iterator;
         typedef typename Ogre::map<K, V, P>::const_iterator const_iterator;
     };
     
+    /**
+     * A list of strings
+     **/
     typedef List<String>::type StringList;
+    
+    /**
+     * A set of strings
+     **/
     typedef Set<String>::type StringSet;
+    
     typedef Map<String, String>::type StringMap;
     typedef Set<IObject*>::type ObjectSet;
     typedef List<IObject*>::type ObjectList;

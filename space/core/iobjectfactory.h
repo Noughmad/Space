@@ -27,12 +27,35 @@ namespace Space { // tolua_export
 
 class IObject;
 
+/**
+ * @brief A factory for creating IObject instances
+ * 
+ * The ObjectManager uses factories for the actual creating of objects. 
+ * @sa ObjectManager::registerFactory(), ObjectManager::createObject()
+ **/
 class IObjectFactory {  // tolua_export
 
 public:
+    /**
+     * @brief Default destructor
+     *
+     **/
     virtual ~IObjectFactory();
         
     // tolua_begin
+    /**
+     * @brief Create an object, identified by @p identifier with parent @p parent
+     * 
+     * The main factory method for creating game objects. 
+     * The @p identifier should contain all the information necessary for creating the object. 
+     * Its properties can be set later. 
+     * 
+     * If the factory determines the supplied @p identifier is not supported, return 0. 
+     * 
+     * @param identifier the unique identifier of the object
+     * @param parent the object's parent
+     * @return The newly created object
+     **/
     virtual IObject* createObject(const String& identifier, IObject* parent = 0) = 0;
 };      
 
