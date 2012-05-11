@@ -39,6 +39,11 @@ struct FactoryCondition
 
 // tolua_end
 
+/**
+ * A singleton class that manages the creation of objects using factories. 
+ * 
+ * @sa IObjectFactory, IObject
+ **/
 class ObjectManager {   // tolua_export
 
 private:    
@@ -47,11 +52,36 @@ private:
     
 public:
     // tolua_begin
+    /**
+     * Returns the singleton instance of the object manager
+     *
+     **/
     static ObjectManager& getSingleton();
     
+    /**
+     * @brief Register an object factory
+     * 
+     * Whenever createObject() is called, the object manager will query all its registered factories. 
+     * If the supplied @p prefix matches the object's identifier, 
+     * this factory's IObjectFactory::createObject() method will be called. 
+     *
+     * @param prefix the factory will only be used for object identifiers starting with this prefix
+     * @param factory the IObjectFactory object to register
+     **/
     void registerFactory(const String& prefix, Space::IObjectFactory* factory);
+    
+    /**
+     * Removes the object factory identified by @p prefix from the register
+     *
+     **/
     void removeFactory(const String& prefix);
     
+    /**
+     * @brief Create an object with identifier @p identifier
+     * 
+     * @param identifier the complete identifier (type and name) of the new object
+     * @return the created object, or 0 if no suitable factories were found
+     **/
     IObject* createObject(const String& identifier);
     // tolua_end
     
