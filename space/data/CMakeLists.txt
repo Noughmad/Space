@@ -44,10 +44,7 @@ install (FILES
 
 install (FILES
     meshes/Planet.mesh
-    meshes/Planet.mesh.xml
     meshes/Star.mesh
-    meshes/Star.mesh.xml
     meshes/Probe.mesh
-    meshes/Probe.mesh.xml
     DESTINATION ${SPACE_DATA_INSTALL_DIR}/meshes
 )
