@@ -2,7 +2,7 @@
 
 #include <OgreException.h>
 
-#include "application.h"
+#include "core/application.h"
 
 #include "objects/star.h"
 #include "objects/planet.h"

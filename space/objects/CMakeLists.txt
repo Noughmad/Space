@@ -19,7 +19,7 @@ if (WITH_TINYXML)
     )
 endif ()
 
-include_directories(${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/..)
+include_directories(${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/.. ${OGRE_INCLUDE_DIR})
 add_definitions(-DBUILD_SPACE_CORE_LIBRARY)
 
 add_library(SpaceObjects SHARED ${Space_Objects_SRCS})
