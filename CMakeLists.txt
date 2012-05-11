@@ -12,6 +12,8 @@ find_package(CEGUI REQUIRED)
 find_package(Lua51 REQUIRED)
 find_package(ToLua REQUIRED)
 
+find_package(Doxygen)
+
 include(SpaceMacros)
 
 set (CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -std=c++11)
