@@ -21,7 +21,7 @@
 
 using namespace Space;
 
-GameController::GameController()
+GameController::GameController(Application* app) : mApplication(app)
 {
 
 }

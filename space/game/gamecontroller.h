@@ -24,14 +24,17 @@
 
 namespace Space {
 
+class Application;
+
 class GameController
 {
 public:
-    GameController();
+    GameController(Application* app);
     virtual ~GameController();
     
 private:
     PlayerList mPlayers;
+    Application* mApplication;
 };
 
 }
