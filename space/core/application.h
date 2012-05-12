@@ -45,15 +45,33 @@ class IObject;
 
 // tolua_begin
 
+/**
+ * @brief A base application class for the Space library
+ * 
+ * This class encapsulates various aspects of the rendering system, user input and user interface. 
+ * 
+ * The behavior of input events can be overriden by subclassing and reimplementing the appropriate event handlers. 
+ **/
 class Application : public Ogre::FrameListener, public Ogre::WindowEventListener, public OIS::KeyListener, public OIS::MouseListener
 {
 
     // tolua_end
     
 public:
+    /**
+     * @brief Creates the application
+     * 
+     * Note the the constructor already initializes the entire system, so the contructed application is in a valid state. 
+     * You can change the scene by accessing the sceneManager() method, or add objects using addObject().  
+     *
+     **/
     Application();
     virtual ~Application();
     
+    /**
+     * Starts the main rendering loop
+     *
+     **/
     void start();       // tolua_export
     
     void setupOgre();
@@ -74,11 +92,25 @@ public:
     
     // tolua_begin
     
+    /**
+     * @brief Returns the scene manager
+     * 
+     **/
     Ogre::SceneManager* sceneManager();
     
     void setMovementManager(IMovementManager* manager);
     
+    /**
+     * @brief Adds an object to the scene
+     *
+     * @param object the new object to add
+     **/
     void addObject(IObject* object);
+    /**
+     * @brief Removes the object from the scene
+     *
+     * @param object the object to remove
+     **/
     void removeObject(IObject* object);
     
     bool pause(const CEGUI::EventArgs& e);

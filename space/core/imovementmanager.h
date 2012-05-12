@@ -25,13 +25,37 @@
 // tolua_begin
 namespace Space {
 
+/**
+ * @brief An interface for managing movement of space objects
+ * 
+ * Reasons for moving objects can be various. 
+ * It can be the natural rotation and revolution of a many-body system, 
+ * or it can be because of player-given orders. 
+ * 
+ * This is a thin interface with only one method. 
+ * See the documentation for processFrame() for details. 
+ **/
 class IMovementManager
 {
     // tolua_end
 public:
+    /**
+     * Default destructor
+     * 
+     **/
     virtual ~IMovementManager();
     
     // tolua_begin
+    /**
+     * @brief Process one frame of the simulations
+     * 
+     * Implement this method to change the positions and orientations of all the objects in the simulation
+     * that need to be moved. 
+     *
+     * @param sceneManager the scene manager
+     * @param objects all the object in the scene
+     * @param timeSinceLastFrame the period in the simulation since the last time this function was called
+     **/
     virtual void processFrame(Ogre::SceneManager* sceneManager, ObjectNodeMap objects, Real timeSinceLastFrame) = 0;
 
 };

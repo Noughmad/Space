@@ -27,7 +27,7 @@ class SceneNode;
 }
 
 /**
- * @brief The main namespace for the entire Space library
+ * @brief The main namespace for the Space library
  **/
 namespace Space
 {

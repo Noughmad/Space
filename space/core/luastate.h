@@ -28,6 +28,12 @@ namespace Space {
 
 class IObject;
 
+/**
+ * @brief Loads and executes Lua scripts
+ * 
+ * This class provides convenience functions for working with the Lua scripting environment. 
+ * 
+ **/
 class LuaState
 {
 
@@ -35,9 +41,30 @@ public:
     LuaState();
     virtual ~LuaState();
     
+    /**
+     * Loads a file and executes its contents. 
+     *
+     * @param name the file to load
+     * @return true if the loading was successful, false otherwise
+     **/
     bool loadFile(const String& name);
+    /**
+     * @brief Loads objects from a Lua file
+     * 
+     * This functions loads the file @p file and runs the function @p function. 
+     * If the specified function returns one or more IObject instances, 
+     * they are return. 
+     *
+     * @param file the file to load
+     * @param function the function in the file to run, defaults to "create_scene".
+     * @return the newly loaded objects
+     **/
     ObjectList loadObjects(const String& file, const String& function = "create_scene");
     
+    /**
+     * Allows a LuaState to be implicitely used as an argument to functions in the Lua C API
+     *
+     **/
     operator lua_State*();
     
 private:
