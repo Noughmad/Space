@@ -18,8 +18,8 @@ install (FILES
     materials/earth.jpg
     materials/mars.jpg
     materials/star_surface.png
-    materials/asteroid.png
-    materials/stevecube.jpg
+#    materials/asteroid.png
+#    materials/stevecube.jpg
     
     materials/box_bk.png
     materials/box_fr.png
